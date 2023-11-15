@@ -1,18 +1,18 @@
 package com.sparta.project_todo.dto;
 
-import com.sparta.project_todo.entity.Board;
+import com.sparta.project_todo.entity.ToDoCard;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
-public class BoardResponseDto {
+public class ToDoResponseDto {
     private Long bNum;
     private String title;
     private String userName;
     private String contents;
     private LocalDateTime createdAt;
-    public BoardResponseDto(Board board)
+    public ToDoResponseDto(ToDoCard board)
     {
         this.bNum = board.getBNum();
         this.title = board.getTitle();
