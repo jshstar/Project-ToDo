@@ -1,20 +1,20 @@
 package com.sparta.project_todo.controller;
 
+import com.sparta.project_todo.dto.LoginRequestDto;
 import com.sparta.project_todo.dto.SignupRequestDto;
 import com.sparta.project_todo.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
 @RequestMapping("/api")
 public class ToDoUserController {
 
@@ -24,41 +24,21 @@ public class ToDoUserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user/login-page")
-    public String loginPage() {
-        return "login";
-    }
-
-    @GetMapping("/user/signup")
-    public String signupPage() {
-        return "signup";
-    }
-
     @PostMapping("/user/signup")
-    public String signup(@Valid SignupRequestDto requestDto, BindingResult bindingResult) {
+    public ResponseEntity<?> signup(@Valid @RequestBody SignupRequestDto requestDto, BindingResult bindingResult) {
+        log.info(requestDto.toString());
         // Validation 예외처리
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         if(fieldErrors.size() > 0) {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
                 log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
             }
-            return "redirect:/api/user/signup";
+            return ResponseEntity.ok("회원 가입 실패");
         }
 
         userService.signup(requestDto);
 
-        return "redirect:/api/user/login-page";
+        return ResponseEntity.ok("회원 가입 성공");
     }
 
-
-    //    @PostMapping("/user/login")
-//    public String login(LoginRequestDto requestDto, HttpServletResponse res) {
-//        try {
-//            userService.login(requestDto, res);
-//        } catch (Exception e) {
-//            return "redirect:/api/user/login-page?error";
-//        }
-//
-//        return "redirect:/"; // main으로
-//    }
 }

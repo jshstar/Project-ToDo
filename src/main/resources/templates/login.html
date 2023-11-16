@@ -58,8 +58,17 @@
       contentType: "application/json",
       data: JSON.stringify({username: username, password: password}),
     })
+
             .done(function (res, status, xhr) {
+              window.localStorage.setItem('user-info', xhr.getResponseHeader('Authorization'));
+              // window.localStorage.getItem(xhr.getResponseHeader('Authorization'));
               window.location.href = host;
+              // $.ajax({
+              //   type: "GET",
+              //   url: `/`,
+              //   contentType: "application/json",
+              //   headers:{'Authorization': xhr.getResponseHeader('Authorization')}
+              // })
             })
             .fail(function (xhr, textStatus, errorThrown) {
               console.log('statusCode: ' + xhr.status);

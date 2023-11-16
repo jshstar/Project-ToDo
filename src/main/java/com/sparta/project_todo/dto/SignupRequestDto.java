@@ -17,6 +17,7 @@ public class SignupRequestDto {
 
     private boolean admin = false;
 
+
     private String adminToken = "";
 }
 

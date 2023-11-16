@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -50,7 +51,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
         String token = jwtUtil.createToken(username, role);
-        jwtUtil.addJwtToCookie(token, response);
+//        response.addHeader(JwtUtil.AUTHORIZATION_HEADER,token);
+        response.setHeader( JwtUtil.AUTHORIZATION_HEADER,token);
+        response.setStatus(HttpStatus.OK.value());
+//        response.getOutputStream().print("로그인 성공!");
+//        jwtUtil.addJwtToCookie(token, response);
     }
 
     @Override

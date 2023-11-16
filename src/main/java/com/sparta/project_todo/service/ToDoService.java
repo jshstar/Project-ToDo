@@ -1,9 +1,11 @@
 package com.sparta.project_todo.service;
 
-import com.sparta.project_todo.dto.ToDoRequestDto;
-import com.sparta.project_todo.dto.ToDoResponseDto;
+import com.sparta.project_todo.dto.*;
 import com.sparta.project_todo.entity.ToDoCard;
+import com.sparta.project_todo.entity.User;
 import com.sparta.project_todo.repository.ToDoRepository;
+import com.sparta.project_todo.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,76 +14,80 @@ import java.util.List;
 @Service
 public class ToDoService {
 
-    private final ToDoRepository boardRepository;
-    public ToDoService(ToDoRepository boardRepository) {
-        this.boardRepository = boardRepository;
+    private final ToDoRepository toDoRepository;
+    private final UserRepository userRepository;
+
+    public ToDoService(ToDoRepository toDoRepository, UserRepository userRepository) {
+        this.toDoRepository = toDoRepository;
+        this.userRepository = userRepository;
     }
 
-    // 게시글 작성기능
-    public ToDoResponseDto createCard(ToDoRequestDto boardRequestDto)
+    // 할일카드 작성기능
+    public ToDoResponseDto createCard(ToDoRequestDto cardRequestDto, User user)
     {
         // RequestDto = Entity
-        ToDoCard board = new ToDoCard(boardRequestDto);
+        ToDoCard card = new ToDoCard(cardRequestDto, user);
         //DB 저장
-        ToDoCard saveBoard = boardRepository.save(board);
-
+        ToDoCard saveBoard = toDoRepository.save(card);
         return new ToDoResponseDto(saveBoard);
     }
 
-
-
-    // 게시글 목록 조회
-    public List<ToDoResponseDto> getCards(){
+    // 카드 목록 조회
+    public List<GetAllToDoResponseDto> getCards(){
         //DB 조회
-        return boardRepository.findAllByOrderByCreatedAtDesc()
-                .stream().map(ToDoResponseDto::new).toList();
+        return toDoRepository.findAllByOrderByCreatedAtDesc()
+                .stream().map(GetAllToDoResponseDto::new).toList();
     }
 
-    // 선택한 게시글 조회 기능
-    public ToDoResponseDto selectGetCards(Long bNum){
-        ToDoCard board = findBoard(bNum);
-        return new ToDoResponseDto(board);
+    //선택한 카드 조회 기능
+    public SelectToDoResponseDto selectGetCards(Long bNum){
+        ToDoCard card = findCard(bNum);
+        return new SelectToDoResponseDto(card);
     }
 
-    // 선택한 게시글 수정 기능
+    // 선택한 카드 수정 기능
     @Transactional
-    public ToDoResponseDto updateCard(Long bNum, ToDoRequestDto boardRequestDto)
+    public SelectToDoResponseDto updateCard(Long bNum, ToDoRequestDto cardRequestDto, User user) throws IllegalAccessException
     {
-        ToDoCard board = findBoard(bNum);
-        board.update(boardRequestDto);
-        return new ToDoResponseDto(board);
+        ToDoCard card = findCard(bNum);
+        if(card.getUser().getUsername().equals(user.getUsername()))
+        {
+            card.update(cardRequestDto);
+            return new SelectToDoResponseDto(card);
+        }
+        else throw new IllegalAccessException("접근 실패");
     }
 
-    // pw 확인 메서드
-    public boolean pwCheck(Long bNum, String pw)
-    {
-        ToDoCard checkBoard = findBoard(bNum);
-        // PW 같은지 체크
-        return checkBoard.getPw().equals(pw);
+    // 선택한 카드 완료 기능
+    @Transactional
+    public CompleteToDoResponseDto completeCard(Long bNum, User user) throws IllegalAccessException{
+        ToDoCard card = findCard(bNum);
+        if(card.getUser().getUsername().equals(user.getUsername()))
+        {
+            card.complete(true);
+            return new CompleteToDoResponseDto(card);
+        }
+        else throw new IllegalAccessException("접근 실패");
+
     }
 
 
 
     // 선택한 게시글 삭제 기능
-    public Long deleteBoard(Long bNum)
+    public Long deleteCard(Long bNum, User user) throws IllegalAccessException
     {
-        ToDoCard board = findBoard(bNum);
-        boardRepository.delete(board);
-        return bNum;
+        ToDoCard card = findCard(bNum);
+        if(card.getUser().getUsername().equals(user.getUsername()))
+        {
+            toDoRepository.delete(card);
+            return bNum;
+        }
+        else throw new IllegalAccessException("접근 실패");
     }
 
-
-    // 예외처리와 동시에 원하는 데이터값 출력
-    // TODO 궁금한 사항 Controller에서 주석처리를 진행했지만?
-    //  findById 자체가 에러처리 구문이 필수로 사용되는데
-    //  이런 상황에서 다른 구조가 마땅히 생각이 안나서 일단 사용했습니다.
-    private ToDoCard findBoard(Long bNum){
-        return boardRepository.findById(bNum).orElseThrow(()->
+    private ToDoCard findCard(Long bNum){
+        return toDoRepository.findById(bNum).orElseThrow(()->
                 new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.")
         );
-
-
     }
-
-
 }
