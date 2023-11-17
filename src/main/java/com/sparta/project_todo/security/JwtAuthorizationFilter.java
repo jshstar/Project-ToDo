@@ -32,7 +32,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
         // TODO JwtUtil클래스로 넘기자
         String tokenValue = jwtUtil.getTokenFromRequest(req);
-        System.out.println("따라라라");
         if (StringUtils.hasText(tokenValue)) {
             // JWT 토큰 substring
             tokenValue = jwtUtil.substringToken(tokenValue);

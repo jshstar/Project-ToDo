@@ -30,34 +30,44 @@ public class ToDoCard extends Timestamped {
     @Column(name = "complete")
     private boolean complete;
 
+    @Column(name = "hidden")
+    private boolean hidden;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "toDoCard", cascade =CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "toDoCard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments;
 
-    // 게시글 작성
+    // 카드 작성
     public ToDoCard(ToDoRequestDto cardRequestDto, User user) {
         this.title = cardRequestDto.getTitle();
         this.contents = cardRequestDto.getContents();
-        this.user =user;
+        this.user = user;
     }
 
+    // 카드 수정
     public void update(ToDoRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
     }
 
-    public void complete(boolean flag){
+    // 카드 할일 완료처리
+    public void complete(boolean flag) {
         this.complete = flag;
     }
 
+    // 카드 비공개처리
+    public void hiddenFlag(boolean flag) {
+        this.hidden = flag;
+    }
+
+    // 댓글 추가
     public void addComment(Comment comment) {
         comment.matchToDoCard(this);
         this.comments.add(comment);
     }
-
 
 
 }
