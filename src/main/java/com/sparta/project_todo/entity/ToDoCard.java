@@ -1,12 +1,9 @@
 package com.sparta.project_todo.entity;
 
 
-import com.sparta.project_todo.dto.CommentRequestDto;
 import com.sparta.project_todo.dto.ToDoRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

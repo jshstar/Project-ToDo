@@ -3,7 +3,6 @@ package com.sparta.project_todo.dto;
 import com.sparta.project_todo.entity.ToDoCard;
 import lombok.Getter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter

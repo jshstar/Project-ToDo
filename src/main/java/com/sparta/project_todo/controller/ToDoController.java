@@ -1,10 +1,7 @@
 package com.sparta.project_todo.controller;
 
 
-import com.sparta.project_todo.dto.GetAllToDoResponseDto;
 import com.sparta.project_todo.dto.ToDoRequestDto;
-import com.sparta.project_todo.dto.ToDoResponseDto;
-import com.sparta.project_todo.entity.User;
 import com.sparta.project_todo.security.UserDetailsImpl;
 import com.sparta.project_todo.service.ToDoService;
 import org.springframework.http.HttpStatus;
@@ -13,7 +10,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Map;
 
 @RestController

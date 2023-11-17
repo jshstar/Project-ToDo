@@ -1,8 +1,6 @@
 package com.sparta.project_todo.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sparta.project_todo.entity.ToDoCard;
-import com.sparta.project_todo.entity.User;
 import lombok.Getter;
 
 import java.time.LocalDateTime;

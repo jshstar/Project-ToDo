@@ -3,10 +3,9 @@ package com.sparta.project_todo.service;
 import com.sparta.project_todo.dto.SignupRequestDto;
 import com.sparta.project_todo.entity.User;
 import com.sparta.project_todo.entity.UserRoleEnum;
-import com.sparta.project_todo.security.JwtUtil;
 import com.sparta.project_todo.repository.UserRepository;
+import com.sparta.project_todo.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

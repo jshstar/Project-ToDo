@@ -4,8 +4,6 @@ import com.sparta.project_todo.dto.*;
 import com.sparta.project_todo.entity.ToDoCard;
 import com.sparta.project_todo.entity.User;
 import com.sparta.project_todo.repository.ToDoRepository;
-import com.sparta.project_todo.repository.UserRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
