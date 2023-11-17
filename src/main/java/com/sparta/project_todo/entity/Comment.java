@@ -33,4 +33,11 @@ public class Comment extends Timestamped{
         this.toDoCard = toDoCard;
     }
 
+    public void matchToDoCard(ToDoCard toDoCard){
+        this.toDoCard = toDoCard;
+    }
+
+    public void updateComment(String comment) {
+        this.comment = comment;
+    }
 }
