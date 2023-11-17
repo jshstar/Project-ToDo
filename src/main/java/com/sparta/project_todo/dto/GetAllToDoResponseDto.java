@@ -9,8 +9,11 @@ import java.time.LocalDateTime;
 @Getter
 public class GetAllToDoResponseDto {
     private String title;
+
     private String user;
+
     private LocalDateTime createAt;
+
     private boolean complete;
 
     public GetAllToDoResponseDto(ToDoCard card)

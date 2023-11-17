@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public class CompleteToDoResponseDto {
     private Long toDoId;
+
     private boolean complete;
 
     public CompleteToDoResponseDto(ToDoCard card){

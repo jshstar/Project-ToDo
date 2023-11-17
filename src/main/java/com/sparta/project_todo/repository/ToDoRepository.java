@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface ToDoRepository extends JpaRepository<ToDoCard, Long> {
     List<ToDoCard> findAllByOrderByCreatedAtDesc();
-    List<ToDoCard> findByCompleteFalseOrderByCreatedAtDesc();
 
+    List<ToDoCard> findByCompleteFalseOrderByCreatedAtDesc();
 }
