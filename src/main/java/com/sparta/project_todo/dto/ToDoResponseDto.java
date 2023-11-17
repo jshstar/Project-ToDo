@@ -1,5 +1,6 @@
 package com.sparta.project_todo.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.sparta.project_todo.entity.ToDoCard;
 import com.sparta.project_todo.entity.User;
 import lombok.Getter;
@@ -8,14 +9,20 @@ import java.time.LocalDateTime;
 
 @Getter
 public class ToDoResponseDto {
-    private Long bNum;
+    private Long toDoId;
+
     private String title;
+
     private String username;
+
     private String contents;
+
     private LocalDateTime createdAt;
+
     private Boolean complete;
+
     public ToDoResponseDto(ToDoCard card) {
-        this.bNum = card.getBNum();
+        this.toDoId = card.getId();
         this.title = card.getTitle();
         this.username = card.getUser().getUsername();
         this.contents = card.getContents();

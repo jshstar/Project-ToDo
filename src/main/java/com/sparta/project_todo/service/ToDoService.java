@@ -15,11 +15,9 @@ import java.util.List;
 public class ToDoService {
 
     private final ToDoRepository toDoRepository;
-    private final UserRepository userRepository;
 
-    public ToDoService(ToDoRepository toDoRepository, UserRepository userRepository) {
+    public ToDoService(ToDoRepository toDoRepository) {
         this.toDoRepository = toDoRepository;
-        this.userRepository = userRepository;
     }
 
     // 할일카드 작성기능
@@ -35,21 +33,21 @@ public class ToDoService {
     // 카드 목록 조회
     public List<GetAllToDoResponseDto> getCards(){
         //DB 조회
-        return toDoRepository.findAllByOrderByCreatedAtDesc()
+        return toDoRepository.findByCompleteFalseOrderByCreatedAtDesc()
                 .stream().map(GetAllToDoResponseDto::new).toList();
     }
 
     //선택한 카드 조회 기능
-    public SelectToDoResponseDto selectGetCards(Long bNum){
-        ToDoCard card = findCard(bNum);
+    public SelectToDoResponseDto selectGetCards(Long id){
+        ToDoCard card = findCard(id);
         return new SelectToDoResponseDto(card);
     }
 
     // 선택한 카드 수정 기능
     @Transactional
-    public SelectToDoResponseDto updateCard(Long bNum, ToDoRequestDto cardRequestDto, User user) throws IllegalAccessException
+    public SelectToDoResponseDto updateCard(Long id, ToDoRequestDto cardRequestDto, User user) throws IllegalAccessException
     {
-        ToDoCard card = findCard(bNum);
+        ToDoCard card = findCard(id);
         if(card.getUser().getUsername().equals(user.getUsername()))
         {
             card.update(cardRequestDto);
@@ -60,34 +58,34 @@ public class ToDoService {
 
     // 선택한 카드 완료 기능
     @Transactional
-    public CompleteToDoResponseDto completeCard(Long bNum, User user) throws IllegalAccessException{
-        ToDoCard card = findCard(bNum);
+    public CompleteToDoResponseDto completeCard(Long id, User user) throws IllegalAccessException{
+        ToDoCard card = findCard(id);
         if(card.getUser().getUsername().equals(user.getUsername()))
         {
             card.complete(true);
             return new CompleteToDoResponseDto(card);
         }
-        else throw new IllegalAccessException("접근 실패");
+        else throw new IllegalAccessException("유저 접근 실패");
 
     }
 
 
 
     // 선택한 게시글 삭제 기능
-    public Long deleteCard(Long bNum, User user) throws IllegalAccessException
+    public Long deleteCard(Long id, User user) throws IllegalAccessException
     {
-        ToDoCard card = findCard(bNum);
+        ToDoCard card = findCard(id);
         if(card.getUser().getUsername().equals(user.getUsername()))
         {
             toDoRepository.delete(card);
-            return bNum;
+            return id;
         }
-        else throw new IllegalAccessException("접근 실패");
+        else throw new IllegalAccessException("유저 접근 실패");
     }
 
-    private ToDoCard findCard(Long bNum){
-        return toDoRepository.findById(bNum).orElseThrow(()->
-                new IllegalArgumentException("선택한 게시글은 존재하지 않습니다.")
+    public ToDoCard findCard(Long id){
+        return toDoRepository.findById(id).orElseThrow(()->
+                new IllegalArgumentException("선택한 카드는 존재하지 않습니다.")
         );
     }
 }

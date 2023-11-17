@@ -48,11 +48,11 @@ public class ToDoController {
     }
 
     // 선택된 게시글 조회
-    @GetMapping("/todo/{bNum}")
-    public ResponseEntity<?> selectGetCard(@PathVariable Long bNum){
+    @GetMapping("/todo/{id}")
+    public ResponseEntity<?> selectGetCard(@PathVariable Long id){
         try
         {
-            return new ResponseEntity<>(toDoService.selectGetCards(bNum),HttpStatus.OK);
+            return new ResponseEntity<>(toDoService.selectGetCards(id),HttpStatus.OK);
         }
         catch (Exception e)
         {
@@ -60,42 +60,52 @@ public class ToDoController {
         }
     }
     // 카드 업데이트
-    @PutMapping("/todo/{bNum}")
-    public ResponseEntity<?> updateCard(@PathVariable Long bNum,
+    @PutMapping("/todo/{id}")
+    public ResponseEntity<?> updateCard(@PathVariable Long id,
                                         @RequestBody ToDoRequestDto requestDto,
                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try{
-            return ResponseEntity.ok(toDoService.updateCard(bNum,requestDto , userDetails.getUser()));
+            return ResponseEntity.ok(toDoService.updateCard(id,requestDto , userDetails.getUser()));
         }catch (IllegalAccessException e)
         {
-            return new ResponseEntity<>(Map.of("error",e.getMessage()), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Map.of("Error",e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+        catch (IllegalArgumentException e){
+            return new ResponseEntity<>(Map.of("Error",e.getMessage()),HttpStatus.NOT_FOUND);
         }
     }
 
     // 카드 완료 업데이트
-    @PutMapping("/todo/{bNum}/complete")
-    public ResponseEntity<?> completeCard(@PathVariable Long bNum,
+    @PutMapping("/todo/{id}/complete")
+    public ResponseEntity<?> completeCard(@PathVariable Long id,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails){
         try {
-            return  ResponseEntity.ok(toDoService.completeCard(bNum, userDetails.getUser()));
+            return  ResponseEntity.ok(toDoService.completeCard(id, userDetails.getUser()));
         }
         catch (IllegalAccessException e)
         {
-            return new ResponseEntity<>(Map.of("error",e.getMessage()), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Map.of("Error",e.getMessage()), HttpStatus.BAD_REQUEST);
+        }
+        catch (IllegalArgumentException e){
+            return new ResponseEntity<>(Map.of("Error",e.getMessage()),HttpStatus.NOT_FOUND);
         }
     }
 
 
     // 카드 삭제
-    @DeleteMapping("/todo/{bNum}")
-    public ResponseEntity<?> deleteCard(@PathVariable Long bNum, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @DeleteMapping("/todo/{id}")
+    public ResponseEntity<?> deleteCard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
-            return ResponseEntity.ok(userDetails.getUser().getUsername()+ "님의 " + toDoService.deleteCard(bNum , userDetails.getUser())+ "글을 삭제 완료했습니다.");
+            return ResponseEntity.ok(userDetails.getUser().getUsername()+ "님의 " + toDoService.deleteCard(id , userDetails.getUser())+ "글을 삭제 완료했습니다.");
         }
         catch (IllegalAccessException e)
         {
-            return new ResponseEntity<>(Map.of("error",e.getMessage()),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Map.of("Error",e.getMessage()),HttpStatus.BAD_REQUEST);
         }
+        catch (IllegalArgumentException e){
+            return new ResponseEntity<>(Map.of("Error",e.getMessage()),HttpStatus.NOT_FOUND);
+        }
+
     }
 
 
