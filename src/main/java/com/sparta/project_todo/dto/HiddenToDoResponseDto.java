@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 public class HiddenToDoResponseDto {
 
-    private Long id;
+    private Long id; // ToDo카드 Id
 
-    private boolean hidden;
+    private boolean hidden; // 비공개 여부
 
     public HiddenToDoResponseDto(ToDoCard card) {
         this.id = card.getId();

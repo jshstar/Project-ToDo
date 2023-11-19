@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 public class CompleteToDoResponseDto {
-    private Long toDoId;
+    private Long toDoId; // 카드 id
 
-    private boolean complete;
+    private boolean complete; // 완료 여부
 
     public CompleteToDoResponseDto(ToDoCard card){
         this.toDoId = card.getId();

@@ -25,11 +25,13 @@ public class ToDoUserController {
         this.userService = userService;
     }
 
+    // 회원가입
     @PostMapping("/user/signup")
     public ResponseEntity<?> signup(@Valid @RequestBody SignupRequestDto requestDto, BindingResult bindingResult) {
         log.info(requestDto.toString());
         // Validation 예외처리
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+
         if (fieldErrors.size() > 0) {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
                 log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());

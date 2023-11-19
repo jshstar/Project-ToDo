@@ -13,18 +13,18 @@ import lombok.Setter;
 public class Comment extends Timestamped{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // 저장 번호
 
     @Column(name = "comment", length = 1000)
-    private String comment;
+    private String comment; // 내용
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User user; // 유저 정보
 
     @ManyToOne
     @JoinColumn(name = "todo_id")
-    private ToDoCard toDoCard;
+    private ToDoCard toDoCard; // 카드 정보
 
     public Comment(String comment, User user, ToDoCard toDoCard)
     {

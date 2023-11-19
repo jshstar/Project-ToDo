@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 @Getter
 public class SelectToDoResponseDto {
 
-    private String title;
+    private String title; // 제목
 
-    private String username;
+    private String username; // 작성자
 
-    private String contents;
+    private String contents; // 내용
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt; // 생성시간
 
     public SelectToDoResponseDto(ToDoCard card) {
         this.title = card.getTitle();

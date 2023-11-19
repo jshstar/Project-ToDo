@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 
 @Getter
 public class CommentResponseDto {
-    private Long commentId;
+    private Long commentId; // 댓글 id
 
-    private String comment;
+    private String comment; // 댓글 내용
 
-    private LocalDateTime createAt;
+    private LocalDateTime createAt; // 생성 시간
 
     public CommentResponseDto(Comment comment){
         this.commentId = comment.getId();

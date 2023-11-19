@@ -7,18 +7,18 @@ import java.time.LocalDateTime;
 
 @Getter
 public class GetAllToDoResponseDto {
-    private String title;
+    private String title; // 제목
 
-    private String user;
+    private String username; // 유저이름
 
-    private LocalDateTime createAt;
+    private LocalDateTime createAt; // 생성시간
 
-    private boolean complete;
+    private boolean complete; // 완료여부
 
     public GetAllToDoResponseDto(ToDoCard card)
     {
         this.title = card.getTitle();
-        this.user = card.getUser().getUsername();
+        this.username = card.getUser().getUsername();
         this.createAt = card.getCreatedAt();
         this.complete = card.isComplete();
     }

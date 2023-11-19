@@ -3,6 +3,7 @@ package com.sparta.project_todo.controller;
 import com.sparta.project_todo.dto.CommentRequestDto;
 import com.sparta.project_todo.security.UserDetailsImpl;
 import com.sparta.project_todo.service.CommentService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,26 +22,30 @@ public class CommentController {
         this.commentService = commentService;
     }
 
+    // 댓글 생성
     @PostMapping("/todo/{id}/comment")
     public ResponseEntity<?> createComment(@PathVariable Long id,
-                                           @RequestBody CommentRequestDto commentRequestDto,
+                                           @Valid @RequestBody CommentRequestDto commentRequestDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             return ResponseEntity.ok(commentService.createComment(id, commentRequestDto, userDetails.getUser()));
+
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.NOT_FOUND);
         }
     }
 
+    // 댓글 업데이트
     @PutMapping("/comment/{id}")
     public ResponseEntity<?> updateComment(@PathVariable Long id,
-                                           @RequestBody CommentRequestDto commentRequestDto,
+                                           @Valid @RequestBody CommentRequestDto commentRequestDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             return ResponseEntity.ok(commentService.updateComment(id, commentRequestDto, userDetails.getUser()));
 
         } catch (IllegalAccessException e) {
             return new ResponseEntity<>(Map.of("Error", e.getMessage()), HttpStatus.BAD_REQUEST);
+
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(Map.of("Error", e.getMessage()), HttpStatus.NOT_FOUND);
         }
@@ -51,8 +56,10 @@ public class CommentController {
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             return ResponseEntity.ok(commentService.deleteComment(id, userDetails.getUser()));
+
         } catch (IllegalAccessException e) {
             return new ResponseEntity<>(Map.of("Error", e.getMessage()), HttpStatus.BAD_REQUEST);
+
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(Map.of("Error", e.getMessage()), HttpStatus.NOT_FOUND);
         }

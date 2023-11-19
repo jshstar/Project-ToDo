@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ToDoRepository extends JpaRepository<ToDoCard, Long> {
-//    List<ToDoCard> findAllByOrderByCreatedAtDesc();
 
     // 완료카드 검색
     List<ToDoCard> findAllByCompleteOrderByCreatedAtDesc(Boolean complete);

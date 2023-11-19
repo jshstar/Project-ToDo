@@ -18,27 +18,27 @@ import java.util.List;
 public class ToDoCard extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // 카드 번호
 
     @Column(name = "title")
     @NotBlank
-    private String title;
+    private String title; // 카드 제목
 
     @Column(name = "contents", length = 1000)
-    private String contents;
+    private String contents; // 카드 내용
 
     @Column(name = "complete")
-    private boolean complete;
+    private boolean complete; // 완료 여부
 
     @Column(name = "hidden")
-    private boolean hidden;
+    private boolean hidden; // 비공개 여부
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private User user; // 유저 정보
 
     @OneToMany(mappedBy = "toDoCard", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
+    private List<Comment> comments; // 댓글 내용이 담긴 목록
 
     // 카드 작성
     public ToDoCard(ToDoRequestDto cardRequestDto, User user) {
