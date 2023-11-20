@@ -29,9 +29,9 @@ public class CommentController {
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
             return ResponseEntity.ok(commentService.createComment(id, commentRequestDto, userDetails.getUser()));
-
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.NOT_FOUND);
+        }  catch (IllegalAccessException e)
+        {
+            return  new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -55,7 +55,7 @@ public class CommentController {
     public ResponseEntity<?> deleteComment(@PathVariable Long id,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
-            return ResponseEntity.ok(commentService.deleteComment(id, userDetails.getUser()));
+            return ResponseEntity.ok("요청하신" + commentService.deleteComment(id, userDetails.getUser())+ "번째 글이 삭제되었습니다.");
 
         } catch (IllegalAccessException e) {
             return new ResponseEntity<>(Map.of("Error", e.getMessage()), HttpStatus.BAD_REQUEST);

@@ -52,7 +52,7 @@ public class ToDoController {
     @GetMapping("/todo/{id}")
     public ResponseEntity<?> selectGetCard(@PathVariable Long id) {
         try {
-            return new ResponseEntity<>(toDoService.selectGetCards(id), HttpStatus.OK);
+            return ResponseEntity.ok(toDoService.selectGetCards(id));
 
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("notFound", "찾으시는 게시글이 없습니다."), HttpStatus.NOT_FOUND);
@@ -64,7 +64,7 @@ public class ToDoController {
     public ResponseEntity<?> getTitleCard(@RequestParam(value = "title") String title,
                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
         try {
-            return new ResponseEntity<>(toDoService.getTitleCards(title, userDetails.getUser()), HttpStatus.OK);
+            return new ResponseEntity<>(toDoService.getTitleCards(title, userDetails), HttpStatus.OK);
 
         } catch (Exception e) {
             return new ResponseEntity<>(Map.of("notFound", "찾으시는 게시글이 없습니다."), HttpStatus.NOT_FOUND);

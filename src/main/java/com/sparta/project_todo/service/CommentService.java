@@ -24,13 +24,16 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto createComment(Long id ,CommentRequestDto commentRequestDto, User user)
-    {
+    public CommentResponseDto createComment(Long id ,CommentRequestDto commentRequestDto, User user) throws IllegalAccessException {
         ToDoCard card = toDoService.findCard(id); // 댓글 달고자 하는 카드 정보 탐색 및 영속성 상태로 저장
+        Comment comment = new Comment(commentRequestDto.getComment(),user, card);
 
-        Comment comment = new Comment(commentRequestDto.getComment(),user, card); // 댓글 정보
-
-        card.addComment(comment); // 댓글 정보를 카드에 저장
+        if(card.isHidden()) // 카드 비공개 check
+        {
+            if(toDoService.matchUsername(card, comment.getUser()))
+                card.addComment(comment);
+        }
+        else card.addComment(comment);
 
         commentRepository.save(comment); // 댓글 DB 저장
 
