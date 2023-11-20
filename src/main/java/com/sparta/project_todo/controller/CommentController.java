@@ -4,12 +4,9 @@ import com.sparta.project_todo.dto.CommentRequestDto;
 import com.sparta.project_todo.security.UserDetailsImpl;
 import com.sparta.project_todo.service.CommentService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 
 @RestController
@@ -26,43 +23,28 @@ public class CommentController {
     @PostMapping("/todo/{id}/comment")
     public ResponseEntity<?> createComment(@PathVariable Long id,
                                            @Valid @RequestBody CommentRequestDto commentRequestDto,
-                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        try {
-            return ResponseEntity.ok(commentService.createComment(id, commentRequestDto, userDetails.getUser()));
-        }  catch (IllegalAccessException e)
-        {
-            return  new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.NOT_FOUND);
-        }
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException{
+
+        return ResponseEntity.ok(commentService.createComment(id, commentRequestDto, userDetails.getUser()));
+
     }
 
     // 댓글 업데이트
     @PutMapping("/comment/{id}")
     public ResponseEntity<?> updateComment(@PathVariable Long id,
                                            @Valid @RequestBody CommentRequestDto commentRequestDto,
-                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        try {
-            return ResponseEntity.ok(commentService.updateComment(id, commentRequestDto, userDetails.getUser()));
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException {
 
-        } catch (IllegalAccessException e) {
-            return new ResponseEntity<>(Map.of("Error", e.getMessage()), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(commentService.updateComment(id, commentRequestDto, userDetails.getUser()));
 
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(Map.of("Error", e.getMessage()), HttpStatus.NOT_FOUND);
-        }
     }
 
+    // 댓글 삭제
     @DeleteMapping("/comment/{id}")
     public ResponseEntity<?> deleteComment(@PathVariable Long id,
-                                           @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        try {
-            return ResponseEntity.ok("요청하신" + commentService.deleteComment(id, userDetails.getUser())+ "번째 글이 삭제되었습니다.");
+                                           @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException {
 
-        } catch (IllegalAccessException e) {
-            return new ResponseEntity<>(Map.of("Error", e.getMessage()), HttpStatus.BAD_REQUEST);
-
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(Map.of("Error", e.getMessage()), HttpStatus.NOT_FOUND);
-        }
+        return ResponseEntity.ok("요청하신" + commentService.deleteComment(id, userDetails.getUser())+ "번째 글이 삭제되었습니다.");
     }
 
 

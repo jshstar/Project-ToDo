@@ -50,12 +50,16 @@ public class ToDoService {
 
             } else getToDoCardList.add(todoCard); // 비공개 처리가 안돼 있는 정보 추가
         }
+
+        if(getToDoCardList.isEmpty())
+            throw new NullPointerException("카드 목록이 없습니다.");
+
         return getToDoCardList.stream().map(GetAllToDoResponseDto::new).toList(); // 결과 리턴
 
     }
 
     //선택한 카드 조회 기능
-    public SelectToDoResponseDto selectGetCards(Long id) {
+    public SelectToDoResponseDto selectGetCards(Long id){
 
         ToDoCard card = findCard(id); // 번호에 따른 카드정보 탐색 및 영속성 저장
 
@@ -64,13 +68,21 @@ public class ToDoService {
 
     // 제목으로 검색
     public List<GetAllToDoResponseDto> getTitleCards(String title, UserDetailsImpl user) {
-        if(user != null)
-            return toDoRepository.titleQuery(title, user.getUser().getId()) // Query 문을 통한 유저 정보 가져오기
-                    .stream().map(GetAllToDoResponseDto::new).toList();
-        else
-            return toDoRepository.titleNotUserQuery(title) // Query 문을 통한 로그인 안한 유저 정보 가져오기
-                    .stream().map(GetAllToDoResponseDto::new).toList();
 
+        List<GetAllToDoResponseDto> titleList;
+
+        if(user != null) {
+            titleList = toDoRepository.titleQuery(title, user.getUser().getId()) // Query 문을 통한 유저 정보 가져오기
+                    .stream().map(GetAllToDoResponseDto::new).toList();
+        } else {
+            titleList = toDoRepository.titleNotUserQuery(title) // Query 문을 통한 로그인 안한 유저 정보 가져오기
+                    .stream().map(GetAllToDoResponseDto::new).toList();
+        }
+
+        if(titleList.isEmpty())
+            throw new NullPointerException("찾으시는 Card가 없습니다.");
+
+        return titleList;
     }
 
     // 선택한 카드 수정 기능
@@ -78,12 +90,11 @@ public class ToDoService {
     public SelectToDoResponseDto updateCard(Long id, ToDoRequestDto cardRequestDto, User user) throws IllegalAccessException {
         ToDoCard card = findCard(id); // 수정할 카드정보 탐색 및 영속성 저장
 
-        if (matchUsername(card, user)) { // 카드의 유저 이름과 수정할 유저의 이름이 같은지 확인
+        matchUsername(card, user);  // 카드의 유저 이름과 수정할 유저의 이름이 같은지 확인
+        card.update(cardRequestDto); // 같다면 수정
 
-            card.update(cardRequestDto); // 같다면 수정
-            return new SelectToDoResponseDto(card); // 수정 정보 반환
+        return new SelectToDoResponseDto(card); // 수정 정보 반환
 
-        } else throw new IllegalAccessException("접근 실패"); // 예외처리
     }
 
     // 선택한 카드 완료 기능
@@ -91,36 +102,30 @@ public class ToDoService {
     public CompleteToDoResponseDto completeCard(Long id, User user) throws IllegalAccessException {
         ToDoCard card = findCard(id); // 완료 처리할 카드정보 탐색 및 영속성 저장
 
-        if (matchUsername(card, user)) { // 카드의 유저 이름과 완료처리할 유저의 이름이 같은지 확인
+        matchUsername(card, user); // 카드의 유저 이름과 완료처리할 유저의 이름이 같은지 확인
+        card.complete(true); // 같다면 완료처리
 
-            card.complete(true); // 같다면 완료처리
-            return new CompleteToDoResponseDto(card); // 완료 정보 반환
-
-        } else throw new IllegalAccessException("유저 접근 실패");
-
+        return new CompleteToDoResponseDto(card); // 완료 정보 반환
     }
 
     @Transactional
     public HiddenToDoResponseDto hiddenCard(Long id, User user) throws IllegalAccessException {
         ToDoCard card = findCard(id); // 비공개 처리할 카드정보 탐색 및 영속성 저장
 
-        if (matchUsername(card, user)) { // 카드의 유저 이름과 완료처리할 유저의 이름이 같은지 확인
+        matchUsername(card, user);  // 카드의 유저 이름과 완료처리할 유저의 이름이 같은지 확인
+        card.hiddenFlag(true); // 비공개 처리
 
-            card.hiddenFlag(true); // 비공개 처리
-            return new HiddenToDoResponseDto(card); // 정보 반환
-
-        } else throw new IllegalAccessException("유저 접근 실패"); // 예외 처리
+        return new HiddenToDoResponseDto(card);
     }
 
     // 선택한 게시글 삭제 기능
     public Long deleteCard(Long id, User user) throws IllegalAccessException {
         ToDoCard card = findCard(id); // 삭제 처리할 카드 탐색 및 영속성 저장
 
-        if (matchUsername(card, user)) { // 카드의 유저 이름과 삭제처리할 유저의 이름이 같은지 확인
-            toDoRepository.delete(card); // 카드삭제
-            return id; // 아이디 반환
+        matchUsername(card, user);  // 카드의 유저 이름과 삭제처리할 유저의 이름이 같은지 확인
+        toDoRepository.delete(card); // 카드삭제
 
-        } else throw new IllegalAccessException("유저 접근 실패"); // 예외 처리
+        return id; // 아이디 반환
     }
 
     // 카드 탐색
@@ -131,9 +136,8 @@ public class ToDoService {
     }
 
     // 카드의 유저이름과 접근한 유저의 이름이 같은지 확인
-    public boolean matchUsername(ToDoCard card, User user) throws IllegalAccessException{
-        if(card.getUser().getUsername().equals(user.getUsername()))
-            return true;
-        else throw new IllegalAccessException("접근할 수 없는 카드입니다.");
+    public void matchUsername(ToDoCard card, User user) throws IllegalAccessException{
+        if(!card.getUser().getUsername().equals(user.getUsername()))
+            throw new IllegalAccessException("접근할 수 없는 카드입니다.");
     }
 }
