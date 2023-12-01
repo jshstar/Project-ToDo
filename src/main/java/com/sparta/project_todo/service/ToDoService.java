@@ -45,17 +45,18 @@ public class ToDoService {
 
             if (todoCard.isHidden()) { // 카드 정보에 비공개 처리 유무 확인
 
-                if (toDoCardUsername.equals(currentUsername)) // 카드의 유저 이름과 조회하는 유저의 이름 일치 확인
+                if (toDoCardUsername.equals(currentUsername)) { // 카드의 유저 이름과 조회하는 유저의 이름 일치 확인
                     getToDoCardList.add(todoCard); // 일치한다면 조회 목록에 추가
-
-            } else getToDoCardList.add(todoCard); // 비공개 처리가 안돼 있는 정보 추가
+                }
+            } else {
+                getToDoCardList.add(todoCard);
+            } // 비공개 처리가 안돼 있는 정보 추가
         }
 
         if(getToDoCardList.isEmpty())
             throw new NullPointerException("카드 목록이 없습니다.");
 
         return getToDoCardList.stream().map(GetAllToDoResponseDto::new).toList(); // 결과 리턴
-
     }
 
     //선택한 카드 조회 기능
