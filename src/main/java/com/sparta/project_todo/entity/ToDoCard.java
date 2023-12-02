@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,7 +38,7 @@ public class ToDoCard extends Timestamped {
     private User user; // 유저 정보
 
     @OneToMany(mappedBy = "toDoCard", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments; // 댓글 내용이 담긴 목록
+    private List<Comment> comments = new ArrayList<>(); // 댓글 내용이 담긴 목록
 
     // 카드 작성
     public ToDoCard(ToDoRequestDto cardRequestDto, User user) {

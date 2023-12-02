@@ -5,10 +5,17 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.Optional;
 
+import javax.swing.text.html.Option;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
+import org.mockito.stubbing.OngoingStubbing;
 
 import com.sparta.project_todo.dto.CommentRequestDto;
 import com.sparta.project_todo.dto.CommentResponseDto;
@@ -19,7 +26,9 @@ import com.sparta.project_todo.entity.User;
 import com.sparta.project_todo.entity.UserRoleEnum;
 import com.sparta.project_todo.repository.CommentRepository;
 import com.sparta.project_todo.repository.ToDoRepository;
+import com.sparta.project_todo.security.UserDetailsImpl;
 
+@ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
 
 	@Mock
@@ -27,28 +36,17 @@ class CommentServiceTest {
 	@Mock
 	ToDoRepository toDoRepository;
 
-	@InjectMocks
+	@Mock
 	ToDoService toDoService;
 
 	@InjectMocks
 	CommentService commentService;
 
-	public User testcreateUser(String num){
+	public User testCreateUser(String num){
 		return new User("username"+ num,"123456789", UserRoleEnum.USER);
 	}
-	public ToDoCard testCreateToDoCard (String num, User user){
-		ToDoRequestDto requestDto = new ToDoRequestDto("testTitle" + num, "testContents" +num);
-		ToDoCard toDoCard = new ToDoCard(requestDto, user);
-		if(Integer.parseInt(num)%2 ==1){
-			toDoCard.hiddenFlag(true);
-		}
-		else {
-			toDoCard.hiddenFlag(false);
-		}
-		return toDoCard;
-	}
 
-	public Comment testcreateComment(String comment, User user, ToDoCard toDoCard) {
+	public Comment testCreateComment(String comment, User user, ToDoCard toDoCard) {
 		return new Comment(comment,user, toDoCard);
 	}
 
@@ -56,25 +54,109 @@ class CommentServiceTest {
 
 	@Nested
 	class 댓글_생성테스트{
-		@Test
-		void 댓글생성_테스트() throws IllegalAccessException {
-			//given
-			User user1 = testcreateUser("1");
-			ToDoCard toDoCard = testCreateToDoCard("1", user1);
-			User user2 = testcreateUser("2");
-			CommentRequestDto commentRequestDto = new CommentRequestDto("comment");
-			Comment comment = testcreateComment(commentRequestDto.getComment(),user2, toDoCard);
-			given(toDoService.findCard(1L)).willReturn(Optional.of(toDoCard));
-			given(commentRepository.save(comment)).willReturn(comment);
 
+		@Test
+		void 댓글생성전_카드히든_있을때_댓글_추가테스트() throws IllegalAccessException {
+			//given
+			User user1 = testCreateUser("1");
+			ToDoCard toDoCard1 = mock();
+			toDoCard1.hiddenFlag(true);
+
+			CommentRequestDto commentRequestDto1 = new CommentRequestDto("comment1");
+
+			given(toDoService.findCard(any())).willReturn(toDoCard1);
+
+			//when
+			commentService.createComment(1L,commentRequestDto1, user1);
+
+			//then
+			verify(toDoCard1,times(1)).addComment(any(Comment.class));
+		}
+
+		@Test
+		void 댓글생성전_카드히든_없을때_댓글_추가테스트() throws IllegalAccessException {
+			//given
+
+			User user1 = testCreateUser("1");
+			ToDoCard toDoCard1 = mock();
+			toDoCard1.hiddenFlag(false);
+			CommentRequestDto commentRequestDto1 = new CommentRequestDto("comment1");
+
+			given(toDoService.findCard(any())).willReturn(toDoCard1);
+
+			//when
+			commentService.createComment(1L,commentRequestDto1, user1);
+
+			//then
+			verify(toDoCard1,times(1)).addComment(any(Comment.class));
+		}
+
+
+		@Test
+		void 댓글생성_응답테스트() throws IllegalAccessException {
+			//given
+			ToDoCard toDoCard = mock();
+			User user2 = testCreateUser("2");
+			CommentRequestDto commentRequestDto = new CommentRequestDto("comment");
+			Comment comment = testCreateComment(commentRequestDto.getComment(),user2, toDoCard);
+
+			given(toDoService.findCard(any())).willReturn(toDoCard);
+			given(commentRepository.save(any())).willReturn(comment);
 			//when
 			CommentResponseDto result = commentService.createComment(1L,commentRequestDto, user2);
 
 			//then
 			assertEquals("comment", result.getComment());
+		}
+	}
+
+	@Test
+	void 댓글_업데이트_테스트() throws IllegalAccessException {
+		//given
+		User user = testCreateUser("1");
+		ToDoCard toDoCard = mock();
+		Comment comment = testCreateComment("comment",user,toDoCard);
+		CommentRequestDto commentRequestDto = new CommentRequestDto("updatecomment");
+		comment.setId(1L);
+
+		given(commentRepository.findById(1L)).willReturn(Optional.of(comment));
+		//when
+		CommentResponseDto result = commentService.updateComment(1L, commentRequestDto, user);
+
+		assertEquals(1L, result.getCommentId());
+		assertEquals("updatecomment", result.getComment());
+	}
+
+	@Nested
+	class 유저_일치_불일치_확인테스트{
+		@Test
+		void 댓글유저_불일치_확인테스트() {
+			//given
+			User writerUser = testCreateUser("1");
+			User accessUser = testCreateUser("2");
+			ToDoCard toDoCard = mock();
+			Comment comment = testCreateComment("comment1",writerUser,toDoCard);
+
+
+			//when && then
+			Assertions.assertThatCode(() ->
+				commentService.matchUsername(comment,accessUser)).isInstanceOf(IllegalAccessException.class);
+		}
+
+		@Test
+		void 댓글유저_일치_확인테스트(){
+			User writerUser = testCreateUser("1");
+			User accessUser = testCreateUser("1");
+			ToDoCard toDoCard = mock();
+			Comment comment = testCreateComment("comment1",writerUser,toDoCard);
+			//when && then
+			Assertions.assertThatCode(() ->
+				commentService.matchUsername(comment,accessUser)).doesNotThrowAnyException();
 
 		}
 
-
 	}
+
 }
+
+

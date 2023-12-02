@@ -63,14 +63,14 @@ public class CommentService {
     }
 
     // 댓글 정보 탐색
-    private Comment findComment(Long id){
+    protected Comment findComment(Long id){
         return commentRepository.findById(id).orElseThrow(()-> // DB에서 id 정보 탐색후 있으면 반환 없으면 예외처리
                 new IllegalArgumentException("선택한 댓글은 존재하지 않습니다.")
         );
     }
 
     // 댓글에 있는 유저정보와 접근하는 유저의 이름 일치 확인
-    private void matchUsername(Comment comment, User user) throws IllegalAccessException {
+    protected void matchUsername(Comment comment, User user) throws IllegalAccessException {
         if(!comment.getUser().getUsername().equals(user.getUsername()))
             throw new IllegalAccessException("접근할 수 없는 댓글입니다.");
     }

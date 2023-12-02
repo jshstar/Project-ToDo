@@ -213,9 +213,9 @@ class ToDoServiceTest {
 	}
 
 	@Nested
-	class 유저_일치_불일치_확인테스트{
+	class 카드유저_일치_불일치_확인테스트{
 		@Test
-		void 유저_불일치_확인테스트() {
+		void 카드유저_불일치_확인테스트() {
 			//given
 			UserDetailsImpl user1 = testCreateUser("1");
 			UserDetailsImpl user2 = testCreateUser("2");
@@ -228,7 +228,7 @@ class ToDoServiceTest {
 		}
 
 		@Test
-		void 유저_일치_확인테스트(){
+		void 카드유저_일치_확인테스트(){
 			UserDetailsImpl cardUser = testCreateUser("1");
 			UserDetailsImpl loginUser = testCreateUser("1");
 			ToDoCard toDoCard = testCreateToDoCard("1", cardUser);
