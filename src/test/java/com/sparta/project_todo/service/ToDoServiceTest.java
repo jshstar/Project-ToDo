@@ -170,7 +170,7 @@ class ToDoServiceTest {
 
 
 		// when
-		given(toDoRepository.findById(any())).willReturn(Optional.of(toDoCard));
+		given(toDoRepository.findById(any(Long.class))).willReturn(Optional.of(toDoCard));
 		SelectToDoResponseDto result = toDoService.updateCard(1L,toDoRequestDto,user1.getUser());
 
 		// then
@@ -189,7 +189,7 @@ class ToDoServiceTest {
 		ReflectionTestUtils.setField(toDoCard, "id", 1L);
 
 		//when
-		given(toDoRepository.findById(any())).willReturn(Optional.of(toDoCard));
+		given(toDoRepository.findById(any(Long.class))).willReturn(Optional.of(toDoCard));
 		CompleteToDoResponseDto result = toDoService.completeCard(1L, user1.getUser());
 
 		//then
@@ -204,7 +204,7 @@ class ToDoServiceTest {
 		ReflectionTestUtils.setField(toDoCard, "id", 1L);
 
 		//when
-		given(toDoRepository.findById(any())).willReturn(Optional.of(toDoCard));
+		given(toDoRepository.findById(any(Long.class))).willReturn(Optional.of(toDoCard));
 		HiddenToDoResponseDto result = toDoService.hiddenCard(1L, user1.getUser());
 
 		//then

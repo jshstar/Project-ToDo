@@ -53,8 +53,6 @@ public class ToDoService {
             } // 비공개 처리가 안돼 있는 정보 추가
         }
 
-        if(getToDoCardList.isEmpty())
-            throw new NullPointerException("카드 목록이 없습니다.");
 
         return getToDoCardList.stream().map(GetAllToDoResponseDto::new).toList(); // 결과 리턴
     }
@@ -79,9 +77,6 @@ public class ToDoService {
             titleList = toDoRepository.titleNotUserQuery(title) // Query 문을 통한 로그인 안한 유저 정보 가져오기
                     .stream().map(GetAllToDoResponseDto::new).toList();
         }
-
-        if(titleList.isEmpty())
-            throw new NullPointerException("찾으시는 Card가 없습니다.");
 
         return titleList;
     }
