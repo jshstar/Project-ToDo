@@ -46,8 +46,8 @@ class CommentServiceTest {
 		return new User("username"+ num,"123456789", UserRoleEnum.USER);
 	}
 
-	public Comment testCreateComment(String comment, User user, ToDoCard toDoCard) {
-		return new Comment(comment,user, toDoCard);
+	public Comment testCreateComment(CommentRequestDto comment, User user, ToDoCard toDoCard) {
+		return new Comment(comment.getComment(),user, toDoCard);
 	}
 
 
@@ -98,7 +98,7 @@ class CommentServiceTest {
 			ToDoCard toDoCard = mock();
 			User user2 = testCreateUser("2");
 			CommentRequestDto commentRequestDto = new CommentRequestDto("comment");
-			Comment comment = testCreateComment(commentRequestDto.getComment(),user2, toDoCard);
+			Comment comment = testCreateComment(commentRequestDto,user2, toDoCard);
 
 			given(toDoService.findCard(any())).willReturn(toDoCard);
 			given(commentRepository.save(any())).willReturn(comment);
@@ -115,15 +115,16 @@ class CommentServiceTest {
 		//given
 		User user = testCreateUser("1");
 		ToDoCard toDoCard = mock();
-		Comment comment = testCreateComment("comment",user,toDoCard);
-		CommentRequestDto commentRequestDto = new CommentRequestDto("updatecomment");
+		CommentRequestDto commentRequestDto = new CommentRequestDto("comment");
+		Comment comment = testCreateComment(commentRequestDto,user,toDoCard);
+		CommentRequestDto updateCommentRequestDto = new CommentRequestDto("updatecomment");
 		comment.setId(1L);
 
 		given(commentRepository.findById(1L)).willReturn(Optional.of(comment));
 		//when
-		CommentResponseDto result = commentService.updateComment(1L, commentRequestDto, user);
+		CommentResponseDto result = commentService.updateComment(1L, updateCommentRequestDto, user);
 
-		assertEquals(1L, result.getCommentId());
+		assertEquals(1L, result.getId());
 		assertEquals("updatecomment", result.getComment());
 	}
 
@@ -135,7 +136,8 @@ class CommentServiceTest {
 			User writerUser = testCreateUser("1");
 			User accessUser = testCreateUser("2");
 			ToDoCard toDoCard = mock();
-			Comment comment = testCreateComment("comment1",writerUser,toDoCard);
+			CommentRequestDto commentRequestDto = new CommentRequestDto("comment");
+			Comment comment = testCreateComment(commentRequestDto,writerUser,toDoCard);
 
 
 			//when && then
@@ -148,7 +150,8 @@ class CommentServiceTest {
 			User writerUser = testCreateUser("1");
 			User accessUser = testCreateUser("1");
 			ToDoCard toDoCard = mock();
-			Comment comment = testCreateComment("comment1",writerUser,toDoCard);
+			CommentRequestDto commentRequestDto = new CommentRequestDto("comment");
+			Comment comment = testCreateComment(commentRequestDto,writerUser,toDoCard);
 			//when && then
 			Assertions.assertThatCode(() ->
 				commentService.matchUsername(comment,accessUser)).doesNotThrowAnyException();

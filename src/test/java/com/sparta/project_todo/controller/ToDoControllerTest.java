@@ -89,7 +89,7 @@ class ToDoControllerTest {
 	}
 
 	@Test
-	void 게시글_작성테스트() throws Exception {
+	void 카드_작성테스트() throws Exception {
 		//given
 		User user = this.mockUserSetup("1");
 		ToDoRequestDto toDoRequestDto = new ToDoRequestDto("title", "contents");
@@ -170,7 +170,7 @@ class ToDoControllerTest {
 
 
 	@Test
-	void 카드목록_제목조회_테스트() throws Exception {
+	void 카드목록_제목조회_성공테스트() throws Exception {
 		//given
 		User user = mockUserSetup("1");
 
@@ -210,56 +210,40 @@ class ToDoControllerTest {
 
 	}
 
-	@Nested
-	class 카드_업데이트테스트{
-		@Test
-		void 카드_업데이트_성공테스트() throws Exception {
-			//given
-			User user1 = mockUserSetup("1");
-			ToDoRequestDto toDoRequestDto = new ToDoRequestDto("title", "updateContents");
-			ToDoCard inputToDoCard1 = new ToDoCard(toDoRequestDto,user1);
-			ReflectionTestUtils.setField(inputToDoCard1,"id",1L);
 
-			ToDoRequestDto updateRequestDto = new ToDoRequestDto("updateTiTle","updateContents");
-			ToDoCard resultToDoCard = new ToDoCard(updateRequestDto,user1);
+	@Test
+	void 카드_업데이트_성공테스트() throws Exception {
+		//given
+		User user1 = mockUserSetup("1");
+		ToDoRequestDto toDoRequestDto = new ToDoRequestDto("title", "updateContents");
+		ToDoCard inputToDoCard1 = new ToDoCard(toDoRequestDto,user1);
+		ReflectionTestUtils.setField(inputToDoCard1,"id",1L);
 
-			SelectToDoResponseDto result = new SelectToDoResponseDto(resultToDoCard);
-			given(toDoService.updateCard(any(Long.class), any(ToDoRequestDto.class),any(User.class))).willReturn(result);
+		ToDoRequestDto updateRequestDto = new ToDoRequestDto("updateTiTle","updateContents");
+		ToDoCard resultToDoCard = new ToDoCard(updateRequestDto,user1);
 
-			String cardInfo = objectMapper.writeValueAsString(result);
+		SelectToDoResponseDto result = new SelectToDoResponseDto(resultToDoCard);
+		given(toDoService.updateCard(any(Long.class), any(ToDoRequestDto.class),any(User.class))).willReturn(result);
 
-			//when
-			mvc.perform(put("/api/todo/{id}",  1L)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(cardInfo)
-					.accept(MediaType.APPLICATION_JSON)
-					.principal(mockPrincipal)
-				)
-				//then
-				.andExpect(status().isOk())
-				.andDo(print())
-				.andExpect(jsonPath("$.title").value(result.getTitle()))
-				.andExpect(jsonPath("$.contents").value(result.getContents()))
-				.andExpect(jsonPath("$.username").value(result.getUsername()));
+		String cardInfo = objectMapper.writeValueAsString(result);
 
-		}
-
-		@Test
-		void 카드_업데이트_예외응답_테스트() throws Exception { // 유저검색이 들어간 모든곳에서 사용
-			//given
-			User user1 = mockUserSetup("1");
-			given(toDoService.updateCard(any(Long.class),any(ToDoRequestDto.class),any(User.class)))
-				.willThrow(IllegalArgumentException.class);
-			//when
-			mvc.perform(put("/api/todo/{id}",  1L)
-					.principal(mockPrincipal)
-				)
-				//then
-				.andExpect(status().isBadRequest())
-				.andDo(print());
-		}
+		//when
+		mvc.perform(put("/api/todo/{id}",  1L)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(cardInfo)
+				.accept(MediaType.APPLICATION_JSON)
+				.principal(mockPrincipal)
+			)
+			//then
+			.andExpect(status().isOk())
+			.andDo(print())
+			.andExpect(jsonPath("$.title").value(result.getTitle()))
+			.andExpect(jsonPath("$.contents").value(result.getContents()))
+			.andExpect(jsonPath("$.username").value(result.getUsername()));
 
 	}
+
+
 
 
 	@Test
@@ -315,6 +299,22 @@ class ToDoControllerTest {
 			.andExpect(jsonPath("$.id").value(result.getId()))
 			.andExpect(jsonPath("$.hidden").value(result.isHidden()))
 			.andExpect(status().isOk())
+			.andDo(print());
+	}
+
+	@Test
+	void 카드_유저불일치_예외응답_테스트() throws Exception {
+		// 유저검색이 들어간 모든곳 에서 사용 따라서 대표적인 하나의 메서드에서만 사용
+		//given
+		User user1 = mockUserSetup("1");
+		given(toDoService.updateCard(any(Long.class),any(ToDoRequestDto.class),any(User.class)))
+			.willThrow(IllegalArgumentException.class);
+		//when
+		mvc.perform(put("/api/todo/{id}",  1L)
+				.principal(mockPrincipal)
+			)
+			//then
+			.andExpect(status().isBadRequest())
 			.andDo(print());
 	}
 

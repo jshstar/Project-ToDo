@@ -2,19 +2,21 @@ package com.sparta.project_todo.dto;
 
 import com.sparta.project_todo.entity.Comment;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Getter
+@RequiredArgsConstructor
 public class CommentResponseDto {
-    private Long commentId; // 댓글 id
+    private final Long id; // 댓글 id
 
-    private String comment; // 댓글 내용
+    private final String comment; // 댓글 내용
 
-    private LocalDateTime createAt; // 생성 시간
+    private final LocalDateTime createAt; // 생성 시간
 
     public CommentResponseDto(Comment comment){
-        this.commentId = comment.getId();
+        this.id = comment.getId();
         this.comment = comment.getComment();
         this.createAt = comment.getCreatedAt();
     }

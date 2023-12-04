@@ -21,17 +21,18 @@ public class CommentController {
 
     // 댓글 생성
     @PostMapping("/todo/{id}/comment")
-    public ResponseEntity<?> createComment(@PathVariable Long id,
+    public ResponseEntity<?> createComment(@PathVariable(name = "id") Long id,
                                            @Valid @RequestBody CommentRequestDto commentRequestDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException{
 
+    System.out.println("들어간드아~!!~!!@!@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return ResponseEntity.ok(commentService.createComment(id, commentRequestDto, userDetails.getUser()));
 
     }
 
     // 댓글 업데이트
     @PutMapping("/comment/{id}")
-    public ResponseEntity<?> updateComment(@PathVariable Long id,
+    public ResponseEntity<?> updateComment(@PathVariable(name = "id") Long id,
                                            @Valid @RequestBody CommentRequestDto commentRequestDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException {
 
@@ -41,7 +42,7 @@ public class CommentController {
 
     // 댓글 삭제
     @DeleteMapping("/comment/{id}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long id,
+    public ResponseEntity<?> deleteComment(@PathVariable(name = "id") Long id,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException {
 
         return ResponseEntity.ok("요청하신" + commentService.deleteComment(id, userDetails.getUser())+ "번째 글이 삭제되었습니다.");

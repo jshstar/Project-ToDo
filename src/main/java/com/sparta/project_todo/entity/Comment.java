@@ -1,5 +1,7 @@
 package com.sparta.project_todo.entity;
 
+import com.sparta.project_todo.dto.CommentRequestDto;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
