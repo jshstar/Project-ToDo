@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ToDoExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project_todo</a> &gt; <a href="index.source.html" class="el_package">com.sparta.project_todo.exception</a> &gt; <span class="el_source">ToDoExceptionHandler.java</span></div><h1>ToDoExceptionHandler.java</h1><pre class="source lang-java linenums">package com.sparta.project_todo.exception;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+
+<span class="fc" id="L10">@Slf4j</span>
+@RestControllerAdvice
+<span class="fc" id="L12">public class ToDoExceptionHandler extends ResponseEntityExceptionHandler {</span>
+
+    // 잘못된 유저 접근 에러
+    @ExceptionHandler(IllegalAccessException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleAccessException(IllegalAccessException e) {
+<span class="nc" id="L17">        log.error(&quot;IllegalAccessException&quot;, e);</span>
+<span class="nc bnc" id="L18" title="All 2 branches missed.">        ErrorResponse response =e.getMessage().isEmpty()?</span>
+<span class="nc" id="L19">                new ErrorResponse(ErrorCode.INVALID_USER):</span>
+<span class="nc" id="L20">                new ErrorResponse(ErrorCode.INVALID_USER.getHttpStatus(),e.getMessage());</span>
+<span class="nc" id="L21">        return new ResponseEntity&lt;&gt;(response, response.getStatus());</span>
+    }
+
+    // 잘못된 인덱스 접근 에러
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleArgumentException(IllegalArgumentException e) {
+<span class="nc" id="L27">        log.error(&quot;IllegalArgumentException&quot;, e);</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">        ErrorResponse response = e.getMessage().isEmpty()?</span>
+<span class="nc" id="L29">                new ErrorResponse(ErrorCode.NOT_ACCESS_CARD):</span>
+<span class="nc" id="L30">                new ErrorResponse(ErrorCode.NOT_ACCESS_CARD.getHttpStatus(),e.getMessage());</span>
+<span class="nc" id="L31">        return new ResponseEntity&lt;&gt;(response, response.getStatus());</span>
+    }
+
+    // null 에러
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleNullPointException(NullPointerException e) {
+<span class="nc" id="L37">        log.error(&quot;NullPointerException&quot;,e);</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">        ErrorResponse response = e.getMessage().isEmpty()?</span>
+<span class="nc" id="L39">                new ErrorResponse(ErrorCode.CARD_NOT_FOUND):</span>
+<span class="nc" id="L40">                new ErrorResponse(ErrorCode.CARD_NOT_FOUND.getHttpStatus(),e.getMessage());</span>
+<span class="nc" id="L41">        return new ResponseEntity&lt;&gt;(response, response.getStatus());</span>
+    }
+
+    // 이외 에러들
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity&lt;ErrorResponse&gt; handleException(Exception e) {
+<span class="nc" id="L47">        log.error(&quot;Exception&quot;, e);</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        ErrorResponse response = e.getMessage().isEmpty()?</span>
+<span class="nc" id="L49">                new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR):</span>
+<span class="nc" id="L50">                new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR.getHttpStatus(),e.getMessage());</span>
+<span class="nc" id="L51">        return new ResponseEntity&lt;&gt;(response, response.getStatus());</span>
+    }
+
+
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

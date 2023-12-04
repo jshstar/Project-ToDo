@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project_todo</a> &gt; <a href="index.source.html" class="el_package">com.sparta.project_todo.service</a> &gt; <span class="el_source">UserService.java</span></div><h1>UserService.java</h1><pre class="source lang-java linenums">package com.sparta.project_todo.service;
+
+import com.sparta.project_todo.dto.SignupRequestDto;
+import com.sparta.project_todo.entity.User;
+import com.sparta.project_todo.entity.UserRoleEnum;
+import com.sparta.project_todo.repository.UserRepository;
+import com.sparta.project_todo.security.JwtUtil;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+<span class="nc" id="L15">@RequiredArgsConstructor</span>
+public class UserService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+
+    // ADMIN_TOKEN
+<span class="nc" id="L23">    private final String ADMIN_TOKEN = &quot;AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC&quot;;</span>
+
+    public void signup(SignupRequestDto requestDto) {
+<span class="nc" id="L26">        String username = requestDto.getUsername();</span>
+<span class="nc" id="L27">        String password = passwordEncoder.encode(requestDto.getPassword());</span>
+
+        // 회원 중복 확인
+<span class="nc" id="L30">        Optional&lt;User&gt; checkUsername = userRepository.findByUsername(username);</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if (checkUsername.isPresent()) {</span>
+<span class="nc" id="L32">            throw new IllegalArgumentException(&quot;중복된 사용자가 존재합니다.&quot;);</span>
+        }
+
+        // 사용자 ROLE 확인
+<span class="nc" id="L36">        UserRoleEnum role = UserRoleEnum.USER;</span>
+
+
+        // 사용자 등록
+<span class="nc" id="L40">        User user = new User(username, password, role);</span>
+<span class="nc" id="L41">        userRepository.save(user);</span>
+<span class="nc" id="L42">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

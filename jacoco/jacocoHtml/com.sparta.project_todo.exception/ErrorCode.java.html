@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ErrorCode.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project_todo</a> &gt; <a href="index.source.html" class="el_package">com.sparta.project_todo.exception</a> &gt; <span class="el_source">ErrorCode.java</span></div><h1>ErrorCode.java</h1><pre class="source lang-java linenums">package com.sparta.project_todo.exception;
+
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+
+<span class="nc" id="L8">@Getter</span>
+<span class="nc" id="L9">@RequiredArgsConstructor</span>
+public enum ErrorCode {
+    // 예외처리를 위해 만든 클래스지만 잘 모릅니다.
+
+    // System Exception
+<span class="nc" id="L14">    INVALID_USER(HttpStatus.BAD_REQUEST,&quot;일치하는 유저정보가 없습니다.&quot;),</span>
+
+<span class="nc" id="L16">    INVALID_TOKEN(HttpStatus.BAD_REQUEST, &quot;일치하는 토큰이 없습니다.&quot;),</span>
+
+<span class="nc" id="L18">    INVALID_PARAMETER(HttpStatus.BAD_REQUEST,&quot;잘못된 입력값입니다.&quot;),</span>
+
+<span class="nc" id="L20">    CARD_CREATE_NOT(HttpStatus.BAD_REQUEST,&quot;Card를 생성할 수 없습니다.&quot;),</span>
+
+<span class="nc" id="L22">    NOT_ACCESS_CARD(HttpStatus.BAD_REQUEST,&quot;해당하는 카드에 접근할 수 없습니다.&quot;),</span>
+
+<span class="nc" id="L24">    CARD_NOT_FOUND(HttpStatus.NOT_FOUND,&quot;해당하는 Card를 찾을 수 없습니다.&quot;),</span>
+
+<span class="nc" id="L26">    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, &quot;서버 에러&quot;),</span>
+
+    // Custom Exception
+<span class="nc" id="L29">    SECURITY(HttpStatus.UNAUTHORIZED, &quot;로그인이 필요합니다&quot;),;</span>
+
+<span class="nc" id="L31">    private final HttpStatus httpStatus;</span>
+<span class="nc" id="L32">    private final String message;</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
