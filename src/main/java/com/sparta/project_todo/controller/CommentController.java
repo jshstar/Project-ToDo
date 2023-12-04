@@ -20,7 +20,7 @@ public class CommentController {
     }
 
     // 댓글 생성
-    @PostMapping("/todo/{id}/comment")
+    @PostMapping("/todo/comment/{id}")
     public ResponseEntity<?> createComment(@PathVariable(name = "id") Long id,
                                            @Valid @RequestBody CommentRequestDto commentRequestDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException{

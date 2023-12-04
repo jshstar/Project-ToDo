@@ -61,7 +61,8 @@ class CommentControllerTest {
 	private ObjectMapper objectMapper;
 
 	@MockBean
-	private CommentService commentService;
+	CommentService commentService;
+
 	@BeforeEach
 	public void setup() {
 		mvc = MockMvcBuilders.webAppContextSetup(context)
@@ -84,24 +85,27 @@ class CommentControllerTest {
 
 	@Test
 	void 댓글생성_성공테스트() throws Exception {
+		//given
 		User user = mockUserSetup("1");
-		Long id = 1L;
 		ToDoCard toDoCard = new ToDoCard(new ToDoRequestDto("title","contents"),user);
+		ReflectionTestUtils.setField(toDoCard,"id",1L);
 		CommentRequestDto commentRequestDto = new CommentRequestDto("comment");
+
 		Comment comment = new Comment(commentRequestDto.getComment(),user,toDoCard);
+		ReflectionTestUtils.setField(comment,"id",1L);
 		CommentResponseDto result = new CommentResponseDto(comment);
 
-		given(commentService.createComment(any(Long.class),any(CommentRequestDto.class),any(User.class)))
-			.willReturn(result);
-
+		given(commentService.createComment(any(Long.class),any(CommentRequestDto.class),any(User.class))).willReturn(result);
 		String commentInfo = objectMapper.writeValueAsString(commentRequestDto);
 
-		mvc.perform(post("/api/todo/{id}/comment",id)
-				.contentType(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+		//when
+		mvc.perform(post("/api/todo/comment/{id}",1L)
+				.contentType(MediaType.APPLICATION_JSON)
 				.content(commentInfo)
 				.accept(MediaType.APPLICATION_JSON)
 				.principal(mockPrincipal)
 			)
+			//then
 			.andExpect(status().isOk())
 			.andDo(print())
 			.andExpect(jsonPath("$.id").value(result.getId()))
@@ -114,33 +118,30 @@ class CommentControllerTest {
 		User user = mockUserSetup("1");
 		ToDoRequestDto toDoRequestDto = new ToDoRequestDto("title", "contents");
 		ToDoCard toDoCard = new ToDoCard(toDoRequestDto, user);
-		// ReflectionTestUtils.setField(toDoCard,"id",1L);
-		Long id = 1L;
+		ReflectionTestUtils.setField(toDoCard,"id",1L);
+
 		CommentRequestDto updateCommentRequestDto= new CommentRequestDto("updatecommnet");
-
-		Comment comment = new Comment(updateCommentRequestDto.getComment(),user,toDoCard);
-		// ReflectionTestUtils.setField(comment,"id",1L);
-
-		// comment.updateComment(updateCommentRequestDto.getComment());
-		CommentResponseDto result = new CommentResponseDto(comment);
+		Comment resultComment = new Comment(updateCommentRequestDto.getComment(),user,toDoCard);
+		ReflectionTestUtils.setField(resultComment,"id",1L);
+		CommentResponseDto result = new CommentResponseDto(resultComment);
 
 		given(commentService.updateComment(any(Long.class),any(CommentRequestDto.class),any(User.class)))
 			.willReturn(result);
 
-		String commentInfo = objectMapper.writeValueAsString(result);
+		String commentInfo = objectMapper.writeValueAsString(updateCommentRequestDto);
 
 		//when
-		mvc.perform(put("/api/comment/{id}",id)
+		mvc.perform(put("/api/comment/{id}",1L)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(commentInfo)
-				.accept(new MediaType(MediaType.APPLICATION_JSON, StandardCharsets.UTF_8))
+				.accept(MediaType.APPLICATION_JSON)
 				.principal(mockPrincipal)
 			)
 			//then
 			.andExpect(status().isOk())
-			.andDo(print());
-			// .andExpect(jsonPath("$.id").value(result.getId()))
-			// .andExpect(jsonPath("$.comment").value(result.getComment()));
+			.andDo(print())
+			.andExpect(jsonPath("$.id").value(result.getId()))
+			.andExpect(jsonPath("$.comment").value(result.getComment()));
 
 	}
 

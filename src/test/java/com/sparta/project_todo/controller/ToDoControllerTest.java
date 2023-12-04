@@ -225,7 +225,7 @@ class ToDoControllerTest {
 		SelectToDoResponseDto result = new SelectToDoResponseDto(resultToDoCard);
 		given(toDoService.updateCard(any(Long.class), any(ToDoRequestDto.class),any(User.class))).willReturn(result);
 
-		String cardInfo = objectMapper.writeValueAsString(result);
+		String cardInfo = objectMapper.writeValueAsString(toDoRequestDto);
 
 		//when
 		mvc.perform(put("/api/todo/{id}",  1L)
@@ -259,7 +259,7 @@ class ToDoControllerTest {
 
 		given(toDoService.completeCard(any(Long.class),any(User.class))).willReturn(result);
 
-		String cardInfo = objectMapper.writeValueAsString(result);
+		String cardInfo = objectMapper.writeValueAsString(toDoRequestDto);
 		//when
 		mvc.perform(put("/api/todo/{id}/complete",1L)
 			.contentType(MediaType.APPLICATION_JSON)
@@ -287,7 +287,7 @@ class ToDoControllerTest {
 
 		given(toDoService.hiddenCard(any(Long.class),any(User.class))).willReturn(result);
 
-		String cardInfo = objectMapper.writeValueAsString(result);
+		String cardInfo = objectMapper.writeValueAsString(toDoRequestDto);
 		//when
 		mvc.perform(put("/api/todo/{id}/hidden",1L)
 				.contentType(MediaType.APPLICATION_JSON)
