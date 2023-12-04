@@ -24,8 +24,6 @@ public class JwtUtil {
 
     // JWT 생성
 
-    // 생성된 JWT를 Cookie에 저장
-
     // Cookie에 들어있던 JWT 토큰을 Substring
 
     // JWT 검증
@@ -39,7 +37,7 @@ public class JwtUtil {
     // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
     // 토큰 만료시간
-    private final long TOKEN_TIME = 60 * 60 * 1000L; // 60분
+    private long TOKEN_TIME = 60 * 60 * 1000L; // 60분
 
     @Value("${jwt.secret.key}") // Base64 Encode 한 SecretKey
     private String secretKey;
