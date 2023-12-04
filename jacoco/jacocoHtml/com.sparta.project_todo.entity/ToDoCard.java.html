@@ -37,15 +37,15 @@ public class ToDoCard extends Timestamped {
     @JoinColumn(name = &quot;user_id&quot;)
 <span class="nc" id="L38">    private User user; // 유저 정보</span>
 
-<span class="fc" id="L40">    @OneToMany(mappedBy = &quot;toDoCard&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+<span class="pc" id="L40">    @OneToMany(mappedBy = &quot;toDoCard&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
 <span class="nc" id="L41">    private List&lt;Comment&gt; comments = new ArrayList&lt;&gt;(); // 댓글 내용이 담긴 목록</span>
 
     // 카드 작성
-<span class="fc" id="L44">    public ToDoCard(ToDoRequestDto cardRequestDto, User user) {</span>
-<span class="fc" id="L45">        this.title = cardRequestDto.getTitle();</span>
-<span class="fc" id="L46">        this.contents = cardRequestDto.getContents();</span>
-<span class="fc" id="L47">        this.user = user;</span>
-<span class="fc" id="L48">    }</span>
+<span class="nc" id="L44">    public ToDoCard(ToDoRequestDto cardRequestDto, User user) {</span>
+<span class="nc" id="L45">        this.title = cardRequestDto.getTitle();</span>
+<span class="nc" id="L46">        this.contents = cardRequestDto.getContents();</span>
+<span class="nc" id="L47">        this.user = user;</span>
+<span class="nc" id="L48">    }</span>
 
     // 카드 수정
     public void update(ToDoRequestDto requestDto) {
@@ -55,13 +55,13 @@ public class ToDoCard extends Timestamped {
 
     // 카드 할일 완료처리
     public void complete(boolean flag) {
-<span class="fc" id="L58">        this.complete = flag;</span>
-<span class="fc" id="L59">    }</span>
+<span class="nc" id="L58">        this.complete = flag;</span>
+<span class="nc" id="L59">    }</span>
 
     // 카드 비공개처리
     public void hiddenFlag(boolean flag) {
-<span class="fc" id="L63">        this.hidden = flag;</span>
-<span class="fc" id="L64">    }</span>
+<span class="nc" id="L63">        this.hidden = flag;</span>
+<span class="nc" id="L64">    }</span>
 
     // 댓글 추가
     public void addComment(Comment comment) {

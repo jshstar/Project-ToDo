@@ -106,6 +106,7 @@ class ToDoRepositoryTest {
 
 	@Test
 	void 비로그인제목_검색테스트(){
+		//when
 		List<ToDoCard> findCompleteCard = toDoRepository.titleNotUserQuery("test");
 
 		//then
