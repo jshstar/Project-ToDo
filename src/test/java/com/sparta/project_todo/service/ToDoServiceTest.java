@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,12 +17,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import com.sparta.project_todo.dto.CommentRequestDto;
 import com.sparta.project_todo.dto.CompleteToDoResponseDto;
 import com.sparta.project_todo.dto.GetAllToDoResponseDto;
 import com.sparta.project_todo.dto.HiddenToDoResponseDto;
 import com.sparta.project_todo.dto.SelectToDoResponseDto;
 import com.sparta.project_todo.dto.ToDoRequestDto;
 import com.sparta.project_todo.dto.ToDoResponseDto;
+import com.sparta.project_todo.entity.Comment;
 import com.sparta.project_todo.entity.ToDoCard;
 import com.sparta.project_todo.entity.User;
 import com.sparta.project_todo.entity.UserRoleEnum;
@@ -86,12 +89,13 @@ class ToDoServiceTest {
 	@Nested
 	class 카드_목록_조회_테스트 {
 		@Test
-		void 카드_Null값_테스트() {
+		void 카드_빈리스트값_테스트() {
 			//given
 			UserDetailsImpl user1 = testCreateUser("1");
+			List<GetAllToDoResponseDto> response = toDoService.getCards(user1);
 
 			// when && then
-			Assertions.assertThatCode(() -> toDoService.getCards(user1)).isInstanceOf(NullPointerException.class);
+			Assertions.assertThat(response).isEmpty();
 			System.out.println("통과");
 		}
 
@@ -147,13 +151,13 @@ class ToDoServiceTest {
 		}
 
 		@Test
-		void 타이틀_리스트_Null_테스트(){
+		void 타이틀_빈리스트_테스트(){
 			//given
 			UserDetailsImpl user1 = testCreateUser("1");
 			String title = "testtitle";
-
+			List<GetAllToDoResponseDto> response = toDoService.getTitleCards(title,user1);
 			//when && then
-			Assertions.assertThatCode(() -> toDoService.getTitleCards(title,user1)).isInstanceOf(NullPointerException.class);
+			Assertions.assertThat(response).isEmpty();
 			System.out.println("통과");
 
 		}
@@ -238,6 +242,24 @@ class ToDoServiceTest {
 
 		}
 
+	}
+
+	@Test
+	void 카드_삭제테스트() throws IllegalAccessException {
+		//given
+		UserDetailsImpl user = testCreateUser("1");
+		ToDoRequestDto requestDto = new ToDoRequestDto("title", "contents");
+		ToDoCard toDoCard = new ToDoCard(requestDto, user.getUser());
+		ReflectionTestUtils.setField(toDoCard,"id",1L);
+
+		given(toDoRepository.findById(1L)).willReturn(Optional.of(toDoCard));
+
+		// when
+		Long deleteId = toDoService.deleteCard(1L, user.getUser());
+
+		//then
+		then(toDoRepository).should().delete(toDoCard);
+		Assertions.assertThat(deleteId).isEqualTo(1L);
 	}
 
 

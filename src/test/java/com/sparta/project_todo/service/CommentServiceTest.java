@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import org.mockito.stubbing.OngoingStubbing;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sparta.project_todo.dto.CommentRequestDto;
 import com.sparta.project_todo.dto.CommentResponseDto;
@@ -33,8 +34,6 @@ class CommentServiceTest {
 
 	@Mock
 	CommentRepository commentRepository;
-	@Mock
-	ToDoRepository toDoRepository;
 
 	@Mock
 	ToDoService toDoService;
@@ -158,6 +157,26 @@ class CommentServiceTest {
 
 		}
 
+	}
+
+	@Test
+	void 댓글_삭제테스트() throws IllegalAccessException {
+		//given
+		User user = testCreateUser("1");
+		ToDoCard toDoCard = mock();
+		ReflectionTestUtils.setField(toDoCard,"id",1L);
+		Long id =1L;
+		CommentRequestDto commentRequestDto = new CommentRequestDto("commnet");
+		Comment comment = testCreateComment(commentRequestDto,user,toDoCard);
+		ReflectionTestUtils.setField(comment,"id",1L);
+		given(commentRepository.findById(1L)).willReturn(Optional.of(comment));
+
+		// when
+		Long deleteId = commentService.deleteComment(id, user);
+
+		//then
+		then(commentRepository).should().delete(comment);
+		Assertions.assertThat(deleteId).isEqualTo(id);
 	}
 
 }
