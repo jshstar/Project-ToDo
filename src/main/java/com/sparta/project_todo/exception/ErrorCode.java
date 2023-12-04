@@ -1,12 +1,14 @@
 package com.sparta.project_todo.exception;
 
 
+import lombok.Generated;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
+@Generated
 public enum ErrorCode {
     // 예외처리를 위해 만든 클래스지만 잘 모릅니다.
 

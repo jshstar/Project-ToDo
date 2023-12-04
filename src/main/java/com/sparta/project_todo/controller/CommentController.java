@@ -25,7 +25,6 @@ public class CommentController {
                                            @Valid @RequestBody CommentRequestDto commentRequestDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException{
 
-    System.out.println("들어간드아~!!~!!@!@!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return ResponseEntity.ok(commentService.createComment(id, commentRequestDto, userDetails.getUser()));
 
     }

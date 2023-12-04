@@ -1,5 +1,6 @@
 package com.sparta.project_todo.exception;
 
+import lombok.Generated;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,6 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @Slf4j
 @RestControllerAdvice
+@Generated
 public class ToDoExceptionHandler extends ResponseEntityExceptionHandler {
 
     // 잘못된 유저 접근 에러

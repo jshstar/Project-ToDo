@@ -2,9 +2,12 @@ package com.sparta.project_todo.exception;
 
 
 import lombok.Data;
+import lombok.Generated;
+
 import org.springframework.http.HttpStatus;
 
 @Data
+@Generated
 public class ErrorResponse {
     private HttpStatus status;
     private String message;

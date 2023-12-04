@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import lombok.Generated;
+
 
 public class UserDetailsImpl implements UserDetails {
 
