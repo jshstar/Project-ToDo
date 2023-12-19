@@ -1,6 +1,12 @@
 package com.sparta.project_todo.todocard.service;
 
-import com.sparta.project_todo.dto.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.sparta.project_todo.security.UserDetailsImpl;
 import com.sparta.project_todo.todocard.dto.CompleteToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.GetAllToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.HiddenToDoResponseDto;
@@ -8,14 +14,8 @@ import com.sparta.project_todo.todocard.dto.SelectToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.ToDoRequestDto;
 import com.sparta.project_todo.todocard.dto.ToDoResponseDto;
 import com.sparta.project_todo.todocard.entity.ToDoCard;
-import com.sparta.project_todo.user.entity.User;
 import com.sparta.project_todo.todocard.repository.ToDoRepository;
-import com.sparta.project_todo.security.UserDetailsImpl;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.sparta.project_todo.user.entity.User;
 
 @Service
 public class ToDoService {
