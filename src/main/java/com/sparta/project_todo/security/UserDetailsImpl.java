@@ -1,16 +1,13 @@
 package com.sparta.project_todo.security;
 
-import com.sparta.project_todo.entity.User;
-import com.sparta.project_todo.entity.UserRoleEnum;
+import com.sparta.project_todo.user.entity.User;
+import com.sparta.project_todo.user.entity.UserRoleEnum;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
-import lombok.Generated;
-
 
 public class UserDetailsImpl implements UserDetails {
 

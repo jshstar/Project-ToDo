@@ -27,20 +27,20 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.project_todo.config.WebSecurityConfig;
-import com.sparta.project_todo.dto.CompleteToDoResponseDto;
-import com.sparta.project_todo.dto.GetAllToDoResponseDto;
-import com.sparta.project_todo.dto.HiddenToDoResponseDto;
-import com.sparta.project_todo.dto.SelectToDoResponseDto;
-import com.sparta.project_todo.dto.ToDoRequestDto;
-import com.sparta.project_todo.dto.ToDoResponseDto;
-import com.sparta.project_todo.entity.ToDoCard;
-import com.sparta.project_todo.entity.User;
-import com.sparta.project_todo.entity.UserRoleEnum;
+import com.sparta.project_todo.global.config.WebSecurityConfig;
+import com.sparta.project_todo.todocard.dto.CompleteToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.GetAllToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.HiddenToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.SelectToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoRequestDto;
+import com.sparta.project_todo.todocard.dto.ToDoResponseDto;
+import com.sparta.project_todo.todocard.entity.ToDoCard;
+import com.sparta.project_todo.user.entity.User;
+import com.sparta.project_todo.user.entity.UserRoleEnum;
 import com.sparta.project_todo.security.MockSpringSecurityFilter;
 import com.sparta.project_todo.security.UserDetailsImpl;
-import com.sparta.project_todo.service.ToDoService;
-
+import com.sparta.project_todo.todocard.service.ToDoService;
+import com.sparta.project_todo.todocard.controller.ToDoController;
 
 @MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(

@@ -1,8 +1,8 @@
 package com.sparta.project_todo.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.project_todo.dto.LoginRequestDto;
-import com.sparta.project_todo.entity.UserRoleEnum;
+import com.sparta.project_todo.user.dto.LoginRequestDto;
+import com.sparta.project_todo.user.entity.UserRoleEnum;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

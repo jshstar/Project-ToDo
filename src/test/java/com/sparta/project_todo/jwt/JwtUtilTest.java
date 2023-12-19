@@ -4,21 +4,17 @@ package com.sparta.project_todo.jwt;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.logging.Logger;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.sparta.project_todo.entity.User;
-import com.sparta.project_todo.entity.UserRoleEnum;
+import com.sparta.project_todo.user.entity.User;
+import com.sparta.project_todo.user.entity.UserRoleEnum;
 import com.sparta.project_todo.security.JwtUtil;
 
 @ExtendWith({MockitoExtension.class, OutputCaptureExtension.class})

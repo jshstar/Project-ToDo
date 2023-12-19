@@ -1,7 +1,7 @@
 package com.sparta.project_todo.security;
 
-import com.sparta.project_todo.entity.User;
-import com.sparta.project_todo.repository.UserRepository;
+import com.sparta.project_todo.user.entity.User;
+import com.sparta.project_todo.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

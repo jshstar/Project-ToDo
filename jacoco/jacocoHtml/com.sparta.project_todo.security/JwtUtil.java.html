@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JwtUtil.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project_todo</a> &gt; <a href="index.source.html" class="el_package">com.sparta.project_todo.security</a> &gt; <span class="el_source">JwtUtil.java</span></div><h1>JwtUtil.java</h1><pre class="source lang-java linenums">package com.sparta.project_todo.security;
 
-import com.sparta.project_todo.entity.UserRoleEnum;
+import com.sparta.project_todo.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -24,8 +24,6 @@ import java.util.Date;
 
     // JWT 생성
 
-    // 생성된 JWT를 Cookie에 저장
-
     // Cookie에 들어있던 JWT 토큰을 Substring
 
     // JWT 검증
@@ -39,85 +37,85 @@ import java.util.Date;
     // Token 식별자
     public static final String BEARER_PREFIX = &quot;Bearer &quot;;
     // 토큰 만료시간
-<span class="nc" id="L42">    private final long TOKEN_TIME = 60 * 60 * 1000L; // 60분</span>
+<span class="nc" id="L40">    private long TOKEN_TIME = 60 * 60 * 1000L; // 60분</span>
 
     @Value(&quot;${jwt.secret.key}&quot;) // Base64 Encode 한 SecretKey
     private String secretKey;
     private Key key;
-<span class="nc" id="L47">    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;</span>
+<span class="nc" id="L45">    private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;</span>
 
     // 로그 설정
-<span class="nc" id="L50">    public static final Logger logger = LoggerFactory.getLogger(&quot;JWT 관련 로그&quot;);</span>
+<span class="nc" id="L48">    public static final Logger logger = LoggerFactory.getLogger(&quot;JWT 관련 로그&quot;);</span>
 
     @PostConstruct
     public void init() {
-<span class="nc" id="L54">        byte[] bytes = Base64.getDecoder().decode(secretKey);</span>
-<span class="nc" id="L55">        key = Keys.hmacShaKeyFor(bytes);</span>
-<span class="nc" id="L56">    }</span>
+<span class="nc" id="L52">        byte[] bytes = Base64.getDecoder().decode(secretKey);</span>
+<span class="nc" id="L53">        key = Keys.hmacShaKeyFor(bytes);</span>
+<span class="nc" id="L54">    }</span>
 
     // 토큰 생성
     public String createToken(String username, UserRoleEnum role) {
-<span class="nc" id="L60">        Date date = new Date();</span>
+<span class="nc" id="L58">        Date date = new Date();</span>
 
-<span class="nc" id="L62">        return BEARER_PREFIX +</span>
-<span class="nc" id="L63">                Jwts.builder()</span>
-<span class="nc" id="L64">                        .setSubject(username) // 사용자 식별자값(ID)</span>
-<span class="nc" id="L65">                        .claim(AUTHORIZATION_KEY, role) // 사용자 권한</span>
-<span class="nc" id="L66">                        .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간</span>
-<span class="nc" id="L67">                        .setIssuedAt(date) // 발급일</span>
-<span class="nc" id="L68">                        .signWith(key, signatureAlgorithm) // 암호화 알고리즘</span>
-<span class="nc" id="L69">                        .compact();</span>
+<span class="nc" id="L60">        return BEARER_PREFIX +</span>
+<span class="nc" id="L61">                Jwts.builder()</span>
+<span class="nc" id="L62">                        .setSubject(username) // 사용자 식별자값(ID)</span>
+<span class="nc" id="L63">                        .claim(AUTHORIZATION_KEY, role) // 사용자 권한</span>
+<span class="nc" id="L64">                        .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간</span>
+<span class="nc" id="L65">                        .setIssuedAt(date) // 발급일</span>
+<span class="nc" id="L66">                        .signWith(key, signatureAlgorithm) // 암호화 알고리즘</span>
+<span class="nc" id="L67">                        .compact();</span>
     }
 
     // JWT Cookie 에 저장
     public void addJwtToCookie(String token, HttpServletResponse res) {
         try {
-<span class="nc" id="L75">            token = URLEncoder.encode(token, &quot;utf-8&quot;).replaceAll(&quot;\\+&quot;, &quot;%20&quot;); // Cookie Value 에는 공백이 불가능해서 encoding 진행</span>
+<span class="nc" id="L73">            token = URLEncoder.encode(token, &quot;utf-8&quot;).replaceAll(&quot;\\+&quot;, &quot;%20&quot;); // Cookie Value 에는 공백이 불가능해서 encoding 진행</span>
 
-<span class="nc" id="L77">            Cookie cookie = new Cookie(AUTHORIZATION_HEADER, token); // Name-Value</span>
-<span class="nc" id="L78">            cookie.setPath(&quot;/&quot;);</span>
+<span class="nc" id="L75">            Cookie cookie = new Cookie(AUTHORIZATION_HEADER, token); // Name-Value</span>
+<span class="nc" id="L76">            cookie.setPath(&quot;/&quot;);</span>
 
             // Response 객체에 Cookie 추가
-<span class="nc" id="L81">            res.addCookie(cookie);</span>
-<span class="nc" id="L82">        } catch (UnsupportedEncodingException e) {</span>
-<span class="nc" id="L83">            logger.error(e.getMessage());</span>
-<span class="nc" id="L84">        }</span>
-<span class="nc" id="L85">    }</span>
+<span class="nc" id="L79">            res.addCookie(cookie);</span>
+<span class="nc" id="L80">        } catch (UnsupportedEncodingException e) {</span>
+<span class="nc" id="L81">            logger.error(e.getMessage());</span>
+<span class="nc" id="L82">        }</span>
+<span class="nc" id="L83">    }</span>
 
     // JWT 토큰 substring
     public String substringToken(String tokenValue) {
-<span class="nc bnc" id="L89" title="All 4 branches missed.">        if (StringUtils.hasText(tokenValue) &amp;&amp; tokenValue.startsWith(BEARER_PREFIX)) {</span>
-<span class="nc" id="L90">            return tokenValue.substring(7);</span>
+<span class="nc bnc" id="L87" title="All 4 branches missed.">        if (StringUtils.hasText(tokenValue) &amp;&amp; tokenValue.startsWith(BEARER_PREFIX)) {</span>
+<span class="nc" id="L88">            return tokenValue.substring(7);</span>
         }
-<span class="nc" id="L92">        logger.error(&quot;Not Found Token&quot;);</span>
-<span class="nc" id="L93">        throw new NullPointerException(&quot;Not Found Token&quot;);</span>
+<span class="nc" id="L90">        logger.error(&quot;Not Found Token&quot;);</span>
+<span class="nc" id="L91">        throw new NullPointerException(&quot;Not Found Token&quot;);</span>
     }
 
     // 토큰 검증
     public boolean validateToken(String token) {
         try {
-<span class="nc" id="L99">            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);</span>
-<span class="nc" id="L100">            return true;</span>
-<span class="nc" id="L101">        } catch (SecurityException | MalformedJwtException | SignatureException e) {</span>
-<span class="nc" id="L102">            logger.error(&quot;Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.&quot;);</span>
-<span class="nc" id="L103">        } catch (ExpiredJwtException e) {</span>
-<span class="nc" id="L104">            logger.error(&quot;Expired JWT token, 만료된 JWT token 입니다.&quot;);</span>
-<span class="nc" id="L105">        } catch (UnsupportedJwtException e) {</span>
-<span class="nc" id="L106">            logger.error(&quot;Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.&quot;);</span>
-<span class="nc" id="L107">        } catch (IllegalArgumentException e) {</span>
-<span class="nc" id="L108">            logger.error(&quot;JWT claims is empty, 잘못된 JWT 토큰 입니다.&quot;);</span>
-<span class="nc" id="L109">        }</span>
-<span class="nc" id="L110">        return false;</span>
+<span class="nc" id="L97">            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);</span>
+<span class="nc" id="L98">            return true;</span>
+<span class="nc" id="L99">        } catch (SecurityException | MalformedJwtException | SignatureException e) {</span>
+<span class="nc" id="L100">            logger.error(&quot;Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.&quot;);</span>
+<span class="nc" id="L101">        } catch (ExpiredJwtException e) {</span>
+<span class="nc" id="L102">            logger.error(&quot;Expired JWT token, 만료된 JWT token 입니다.&quot;);</span>
+<span class="nc" id="L103">        } catch (UnsupportedJwtException e) {</span>
+<span class="nc" id="L104">            logger.error(&quot;Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.&quot;);</span>
+<span class="nc" id="L105">        } catch (IllegalArgumentException e) {</span>
+<span class="nc" id="L106">            logger.error(&quot;JWT claims is empty, 잘못된 JWT 토큰 입니다.&quot;);</span>
+<span class="nc" id="L107">        }</span>
+<span class="nc" id="L108">        return false;</span>
     }
 
     // 토큰에서 사용자 정보 가져오기
     public Claims getUserInfoFromToken(String token) {
-<span class="nc" id="L115">        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();</span>
+<span class="nc" id="L113">        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();</span>
     }
 
     // HttpServletRequest 에서 Cookie Value : JWT 가져오기
     public String getTokenFromRequest(HttpServletRequest req) {
-<span class="nc" id="L120">        return req.getHeader(AUTHORIZATION_HEADER);</span>
+<span class="nc" id="L118">        return req.getHeader(AUTHORIZATION_HEADER);</span>
     }
 
 }

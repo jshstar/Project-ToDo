@@ -12,8 +12,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.sparta.project_todo.entity.User;
-import com.sparta.project_todo.entity.UserRoleEnum;
+import com.sparta.project_todo.user.entity.User;
+import com.sparta.project_todo.user.entity.UserRoleEnum;
+import com.sparta.project_todo.user.repository.UserRepository;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)

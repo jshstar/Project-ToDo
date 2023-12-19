@@ -24,17 +24,18 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.project_todo.config.WebSecurityConfig;
-import com.sparta.project_todo.dto.CommentRequestDto;
-import com.sparta.project_todo.dto.CommentResponseDto;
-import com.sparta.project_todo.dto.ToDoRequestDto;
-import com.sparta.project_todo.entity.Comment;
-import com.sparta.project_todo.entity.ToDoCard;
-import com.sparta.project_todo.entity.User;
-import com.sparta.project_todo.entity.UserRoleEnum;
+import com.sparta.project_todo.comment.controller.CommentController;
+import com.sparta.project_todo.global.config.WebSecurityConfig;
+import com.sparta.project_todo.comment.dto.CommentRequestDto;
+import com.sparta.project_todo.comment.dto.CommentResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoRequestDto;
+import com.sparta.project_todo.comment.entity.Comment;
+import com.sparta.project_todo.todocard.entity.ToDoCard;
+import com.sparta.project_todo.user.entity.User;
+import com.sparta.project_todo.user.entity.UserRoleEnum;
 import com.sparta.project_todo.security.MockSpringSecurityFilter;
 import com.sparta.project_todo.security.UserDetailsImpl;
-import com.sparta.project_todo.service.CommentService;
+import com.sparta.project_todo.comment.service.CommentService;
 
 @MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(

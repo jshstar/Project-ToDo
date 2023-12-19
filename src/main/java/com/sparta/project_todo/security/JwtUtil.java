@@ -1,6 +1,6 @@
 package com.sparta.project_todo.security;
 
-import com.sparta.project_todo.entity.UserRoleEnum;
+import com.sparta.project_todo.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Entity
 @Getter
 <span class="nc" id="L11">@Setter</span>
-<span class="fc" id="L12">@NoArgsConstructor</span>
+<span class="nc" id="L12">@NoArgsConstructor</span>
 @Table(name = &quot;users&quot;)
 public class User {
     @Id
@@ -24,7 +24,7 @@ public class User {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)// 이넘 사용시 데이터 저장 어노테이션
-<span class="nc" id="L27">    private UserRoleEnum role; // 유저 권한 정보</span>
+<span class="fc" id="L27">    private UserRoleEnum role; // 유저 권한 정보</span>
 
 <span class="fc" id="L29">    public User(String username, String password, UserRoleEnum role) {</span>
 <span class="fc" id="L30">        this.username = username;</span>

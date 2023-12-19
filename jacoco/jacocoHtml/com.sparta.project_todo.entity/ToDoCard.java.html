@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = &quot;todo&quot;)
-<span class="fc" id="L17">@NoArgsConstructor</span>
+<span class="nc" id="L17">@NoArgsConstructor</span>
 public class ToDoCard extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,11 +41,11 @@ public class ToDoCard extends Timestamped {
 <span class="nc" id="L41">    private List&lt;Comment&gt; comments = new ArrayList&lt;&gt;(); // 댓글 내용이 담긴 목록</span>
 
     // 카드 작성
-<span class="nc" id="L44">    public ToDoCard(ToDoRequestDto cardRequestDto, User user) {</span>
-<span class="nc" id="L45">        this.title = cardRequestDto.getTitle();</span>
-<span class="nc" id="L46">        this.contents = cardRequestDto.getContents();</span>
-<span class="nc" id="L47">        this.user = user;</span>
-<span class="nc" id="L48">    }</span>
+<span class="fc" id="L44">    public ToDoCard(ToDoRequestDto cardRequestDto, User user) {</span>
+<span class="fc" id="L45">        this.title = cardRequestDto.getTitle();</span>
+<span class="fc" id="L46">        this.contents = cardRequestDto.getContents();</span>
+<span class="fc" id="L47">        this.user = user;</span>
+<span class="fc" id="L48">    }</span>
 
     // 카드 수정
     public void update(ToDoRequestDto requestDto) {

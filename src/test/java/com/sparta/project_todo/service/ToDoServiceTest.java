@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.assertj.core.api.Assertions;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,19 +16,19 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.sparta.project_todo.dto.CommentRequestDto;
-import com.sparta.project_todo.dto.CompleteToDoResponseDto;
-import com.sparta.project_todo.dto.GetAllToDoResponseDto;
-import com.sparta.project_todo.dto.HiddenToDoResponseDto;
-import com.sparta.project_todo.dto.SelectToDoResponseDto;
-import com.sparta.project_todo.dto.ToDoRequestDto;
-import com.sparta.project_todo.dto.ToDoResponseDto;
-import com.sparta.project_todo.entity.Comment;
-import com.sparta.project_todo.entity.ToDoCard;
-import com.sparta.project_todo.entity.User;
-import com.sparta.project_todo.entity.UserRoleEnum;
-import com.sparta.project_todo.repository.ToDoRepository;
+import com.sparta.project_todo.todocard.dto.CompleteToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.GetAllToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.HiddenToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.SelectToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoRequestDto;
+import com.sparta.project_todo.todocard.dto.ToDoResponseDto;
+import com.sparta.project_todo.todocard.entity.ToDoCard;
+import com.sparta.project_todo.user.entity.User;
+import com.sparta.project_todo.user.entity.UserRoleEnum;
+import com.sparta.project_todo.todocard.repository.ToDoRepository;
 import com.sparta.project_todo.security.UserDetailsImpl;
+import com.sparta.project_todo.todocard.service.ToDoService;
+
 @ExtendWith(MockitoExtension.class)
 class ToDoServiceTest {
 

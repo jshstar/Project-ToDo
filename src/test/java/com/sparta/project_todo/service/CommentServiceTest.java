@@ -5,8 +5,6 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.Optional;
 
-import javax.swing.text.html.Option;
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,20 +12,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.Answer;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import com.sparta.project_todo.dto.CommentRequestDto;
-import com.sparta.project_todo.dto.CommentResponseDto;
-import com.sparta.project_todo.dto.ToDoRequestDto;
-import com.sparta.project_todo.entity.Comment;
-import com.sparta.project_todo.entity.ToDoCard;
-import com.sparta.project_todo.entity.User;
-import com.sparta.project_todo.entity.UserRoleEnum;
-import com.sparta.project_todo.repository.CommentRepository;
-import com.sparta.project_todo.repository.ToDoRepository;
-import com.sparta.project_todo.security.UserDetailsImpl;
+import com.sparta.project_todo.comment.service.CommentService;
+import com.sparta.project_todo.comment.dto.CommentRequestDto;
+import com.sparta.project_todo.comment.dto.CommentResponseDto;
+import com.sparta.project_todo.comment.entity.Comment;
+import com.sparta.project_todo.todocard.entity.ToDoCard;
+import com.sparta.project_todo.user.entity.User;
+import com.sparta.project_todo.user.entity.UserRoleEnum;
+import com.sparta.project_todo.comment.repository.CommentRepository;
+import com.sparta.project_todo.todocard.service.ToDoService;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
