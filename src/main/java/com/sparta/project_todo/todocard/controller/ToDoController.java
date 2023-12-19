@@ -34,8 +34,8 @@ public class ToDoController {
     public ResponseEntity<SuccessResponse> createCard(@RequestBody ToDoRequestDto requestDto,
                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ToDoResponseDto toDoResponseDto = toDoService.createCard(requestDto, userDetails.getUser());
-        return ResponseEntity.status(SUCCESS_CREATE.getHttpStatus().value())
-            .body(new SuccessResponse(SUCCESS_CREATE,toDoResponseDto));
+        return ResponseEntity.status(SUCCESS_CREATE_CARD.getHttpStatus().value())
+            .body(new SuccessResponse(SUCCESS_CREATE_CARD,toDoResponseDto));
     }
 
     // 게시글 목록 조회
