@@ -24,6 +24,7 @@ public enum ResponseCode {
 	SUCCESS_COMPLETE(OK, "카드 완료처리 완료"),
 	SUCCESS_HIDDEN(OK,"카드 히튼처리 완료"),
 	SUCCESS_DELETE(OK, "카드 삭제 완료"),
+	SUCCESS_GET_PAGE_CARD(OK, "카드 조회 완료"),
 
 	SUCCESS_CREATE_COMMENT(CREATED, "댓글 달기 성공"),
 	SUCCESS_UPDATE_COMMENT(OK, "댓글 업데이트 성공"),

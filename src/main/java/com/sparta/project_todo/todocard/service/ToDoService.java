@@ -3,6 +3,8 @@ package com.sparta.project_todo.todocard.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +13,8 @@ import com.sparta.project_todo.todocard.dto.CompleteToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.GetAllToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.HiddenToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.SelectToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoPageCardListResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoPageCardResponseDto;
 import com.sparta.project_todo.todocard.dto.ToDoRequestDto;
 import com.sparta.project_todo.todocard.dto.ToDoResponseDto;
 import com.sparta.project_todo.todocard.entity.ToDoCard;
@@ -58,9 +62,14 @@ public class ToDoService {
                 getToDoCardList.add(todoCard);
             } // 비공개 처리가 안돼 있는 정보 추가
         }
-
-
         return getToDoCardList.stream().map(GetAllToDoResponseDto::new).toList(); // 결과 리턴
+    }
+
+    // 페이징 조회
+    public ToDoPageCardListResponseDto getPageCard(Pageable pageable, UserDetailsImpl userDetails){
+
+        Page<ToDoCard> pageCardList = toDoRepository.findPageCard(pageable, userDetails.getUser().getId());
+		return new ToDoPageCardListResponseDto(pageCardList);
     }
 
     //선택한 카드 조회 기능
@@ -109,6 +118,7 @@ public class ToDoService {
 
         return new CompleteToDoResponseDto(card); // 완료 정보 반환
     }
+
 
     @Transactional
     public HiddenToDoResponseDto hiddenCard(Long id, User user) throws IllegalAccessException {

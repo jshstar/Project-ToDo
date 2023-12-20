@@ -8,10 +8,15 @@ import com.sparta.project_todo.todocard.dto.CompleteToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.GetAllToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.HiddenToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.SelectToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoPageCardListResponseDto;
 import com.sparta.project_todo.todocard.dto.ToDoRequestDto;
 import com.sparta.project_todo.security.UserDetailsImpl;
 import com.sparta.project_todo.todocard.dto.ToDoResponseDto;
 import com.sparta.project_todo.todocard.service.ToDoService;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,14 +43,12 @@ public class ToDoController {
             .body(new SuccessResponse(SUCCESS_CREATE_CARD,toDoResponseDto));
     }
 
-    // 게시글 목록 조회
+    // 피드 조회
     @GetMapping("/todo")
-    public ResponseEntity<SuccessResponse> getCards(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-
-        List<GetAllToDoResponseDto> responseDto = toDoService.getCards(userDetails);
-
-        return ResponseEntity.status(SUCCESS_GET_CARD.getHttpStatus().value())
-            .body(new SuccessResponse(SUCCESS_GET_CARD, responseDto));
+    public ResponseEntity<?> getPagingCard(Pageable pageable , @AuthenticationPrincipal UserDetailsImpl userDetails){
+        ToDoPageCardListResponseDto toDoPageCardListResponseDto  = toDoService.getPageCard(pageable, userDetails);
+        return ResponseEntity.status(SUCCESS_GET_PAGE_CARD.getHttpStatus().value())
+            .body(new SuccessResponse(SUCCESS_GET_PAGE_CARD,toDoPageCardListResponseDto));
     }
 
     // 선택된 카드 조회
@@ -64,6 +67,7 @@ public class ToDoController {
         return ResponseEntity.status(SUCCESS_GET_TITLE_CARD.getHttpStatus().value())
             .body(new SuccessResponse(SUCCESS_GET_TITLE_CARD, getAllToDoResponseDto));
     }
+
 
     // 카드 업데이트
     @PutMapping("/todo/{id}")
