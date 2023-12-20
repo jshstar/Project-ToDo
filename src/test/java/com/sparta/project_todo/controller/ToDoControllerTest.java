@@ -18,6 +18,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +35,7 @@ import com.sparta.project_todo.todocard.dto.CompleteToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.GetAllToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.HiddenToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.SelectToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoPageCardListResponseDto;
 import com.sparta.project_todo.todocard.dto.ToDoRequestDto;
 import com.sparta.project_todo.todocard.dto.ToDoResponseDto;
 import com.sparta.project_todo.todocard.entity.ToDoCard;
@@ -112,9 +116,9 @@ class ToDoControllerTest {
 		//then
 			.andExpect(status().isCreated())
 			.andDo(print())
-			.andExpect(jsonPath("$.title").value(toDoResponseDto.getTitle()))
-			.andExpect(jsonPath("$.contents").value(toDoResponseDto.getContents()))
-			.andExpect(jsonPath("$.username").value(toDoResponseDto.getUsername()));
+			.andExpect(jsonPath("$.data.title").value(toDoResponseDto.getTitle()))
+			.andExpect(jsonPath("$.data.contents").value(toDoResponseDto.getContents()))
+			.andExpect(jsonPath("$.data.username").value(toDoResponseDto.getUsername()));
 	}
 
 	@Nested
@@ -128,11 +132,13 @@ class ToDoControllerTest {
 			ToDoCard toDoCard1 = new ToDoCard(toDoRequestDto1, user);
 			ToDoCard todoCard2 = new ToDoCard(toDoRequestDto2, user);
 
-			List<GetAllToDoResponseDto> getResponse = new ArrayList<>();
-			getResponse.add(new GetAllToDoResponseDto(toDoCard1));
-			getResponse.add(new GetAllToDoResponseDto(todoCard2));
+			List<ToDoCard> toDoCardList = new ArrayList<>();
+			toDoCardList.add(toDoCard1);
+			toDoCardList.add(todoCard2);
+			Page<ToDoCard> toDoCardPage = new PageImpl<>(toDoCardList);
+			ToDoPageCardListResponseDto responseDto = new ToDoPageCardListResponseDto(toDoCardPage);
 
-			given(toDoService.getCards(any(UserDetailsImpl.class))).willReturn(getResponse);
+			given(toDoService.getPageCard(any(Pageable.class),any(UserDetailsImpl.class))).willReturn(responseDto);
 
 			//when
 			mvc.perform(get("/api/todo")
@@ -142,19 +148,25 @@ class ToDoControllerTest {
 			//then
 				.andExpect(status().isOk())
 				.andDo(print())
-				.andExpect(jsonPath("$[0].title").value(getResponse.get(0).getTitle()))
-				.andExpect(jsonPath("$[0].username").value(getResponse.get(0).getUsername()))
-				.andExpect(jsonPath("$[1].title").value(getResponse.get(1).getTitle()))
-				.andExpect(jsonPath("$[1].username").value(getResponse.get(1).getUsername()));
+				.andExpect(jsonPath("$.data.pageList.content[0].title")
+					.value(responseDto.getPageList().getContent().get(0).getTitle()))
+				.andExpect(jsonPath("$.data.pageList.content[0].username")
+					.value(responseDto.getPageList().getContent().get(0).getUsername()))
+				.andExpect(jsonPath("$.data.pageList.content[1].title")
+					.value(responseDto.getPageList().getContent().get(1).getTitle()))
+				.andExpect(jsonPath("$.data.pageList.content[1].username")
+					.value(responseDto.getPageList().getContent().get(1).getUsername()));
 		}
 
 		@Test
 		void 카드목록_빈리스트일때_조회_실패테스트() throws Exception {
 			//given
 			mockUserSetup("1");
-			List<GetAllToDoResponseDto> getResponse = new ArrayList<>();
+			List<ToDoCard> toDoCardList = new ArrayList<>();
+			Page<ToDoCard> toDoCardPage = new PageImpl<>(toDoCardList);
+			ToDoPageCardListResponseDto responseDto = new ToDoPageCardListResponseDto(toDoCardPage);
 
-			given(toDoService.getCards(any(UserDetailsImpl.class))).willReturn(getResponse);
+			given(toDoService.getPageCard(any(Pageable.class),any(UserDetailsImpl.class))).willReturn(responseDto);
 
 			//when
 			mvc.perform(get("/api/todo")
@@ -162,7 +174,7 @@ class ToDoControllerTest {
 					.principal(mockPrincipal)
 				)
 			//then
-				.andExpect(jsonPath("$.size()").value(0))
+				.andExpect(jsonPath("$.data.pageList.content.size()").value(0))
 				.andExpect(status().isOk())
 				.andDo(print());
 		}
@@ -201,10 +213,10 @@ class ToDoControllerTest {
 			.principal(mockPrincipal)
 			)
 		//then
-			.andExpect(jsonPath("$.size()").value(2))
-			.andExpect(jsonPath("$[0].title").value(answerResponse.get(0).getTitle()))
-			.andExpect(jsonPath("$[1].title").value(answerResponse.get(1).getTitle()))
-			.andExpect(jsonPath("$[0].username").value(answerResponse.get(0).getUsername()))
+			.andExpect(jsonPath("$.data.size()").value(2))
+			.andExpect(jsonPath("$.data[0].title").value(answerResponse.get(0).getTitle()))
+			.andExpect(jsonPath("$.data[1].title").value(answerResponse.get(1).getTitle()))
+			.andExpect(jsonPath("$.data[0].username").value(answerResponse.get(0).getUsername()))
 			.andExpect(status().isOk())
 			.andDo(print());
 
@@ -219,7 +231,7 @@ class ToDoControllerTest {
 		ToDoCard inputToDoCard1 = new ToDoCard(toDoRequestDto,user1);
 		ReflectionTestUtils.setField(inputToDoCard1,"id",1L);
 
-		ToDoRequestDto updateRequestDto = new ToDoRequestDto("updateTiTle","updateContents");
+		ToDoRequestDto updateRequestDto = new ToDoRequestDto("updateTitle","updateContents");
 		ToDoCard resultToDoCard = new ToDoCard(updateRequestDto,user1);
 
 		SelectToDoResponseDto result = new SelectToDoResponseDto(resultToDoCard);
@@ -237,9 +249,9 @@ class ToDoControllerTest {
 			//then
 			.andExpect(status().isOk())
 			.andDo(print())
-			.andExpect(jsonPath("$.title").value(result.getTitle()))
-			.andExpect(jsonPath("$.contents").value(result.getContents()))
-			.andExpect(jsonPath("$.username").value(result.getUsername()));
+			.andExpect(jsonPath("$.data.title").value(result.getTitle()))
+			.andExpect(jsonPath("$.data.contents").value(result.getContents()))
+			.andExpect(jsonPath("$.data.username").value(result.getUsername()));
 
 	}
 
@@ -268,8 +280,8 @@ class ToDoControllerTest {
 			.principal(mockPrincipal)
 			)
 		//then
-			.andExpect(jsonPath("$.id").value(result.getId()))
-			.andExpect(jsonPath("$.complete").value(result.isComplete()))
+			.andExpect(jsonPath("$.data.id").value(result.getId()))
+			.andExpect(jsonPath("$.data.complete").value(result.isComplete()))
 			.andExpect(status().isOk())
 			.andDo(print());
 	}
@@ -296,8 +308,8 @@ class ToDoControllerTest {
 				.principal(mockPrincipal)
 			)
 			//then
-			.andExpect(jsonPath("$.id").value(result.getId()))
-			.andExpect(jsonPath("$.hidden").value(result.isHidden()))
+			.andExpect(jsonPath("$.data.id").value(result.getId()))
+			.andExpect(jsonPath("$.data.hidden").value(result.isHidden()))
 			.andExpect(status().isOk())
 			.andDo(print());
 	}

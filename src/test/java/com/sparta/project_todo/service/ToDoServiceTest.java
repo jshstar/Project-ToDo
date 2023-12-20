@@ -14,12 +14,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sparta.project_todo.todocard.dto.CompleteToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.GetAllToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.HiddenToDoResponseDto;
 import com.sparta.project_todo.todocard.dto.SelectToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoPageCardListResponseDto;
 import com.sparta.project_todo.todocard.dto.ToDoRequestDto;
 import com.sparta.project_todo.todocard.dto.ToDoResponseDto;
 import com.sparta.project_todo.todocard.entity.ToDoCard;
@@ -121,6 +125,34 @@ class ToDoServiceTest {
 		}
 
 	}
+
+	@Test
+	void 카드_목록_페이징조회_성공테스트(){
+		//given
+		UserDetailsImpl user1 = testCreateUser("1");
+		UserDetailsImpl user2 = testCreateUser("2");
+		ToDoCard toDoCard1 = testCreateToDoCard("1", user1);
+		ToDoCard toDoCard2 = testCreateToDoCard("2", user2);
+
+		List<ToDoCard> toDoCardList = testCreateToDoCardList(toDoCard1, toDoCard2);
+		Pageable pageable = Pageable.ofSize(2);
+		pageable.withPage(0);
+		Page<ToDoCard> toDoCardPage = new PageImpl<>(toDoCardList);
+
+
+		// when
+		given(toDoRepository.findPageCard(any(Pageable.class),any())).willReturn(toDoCardPage);
+		ToDoPageCardListResponseDto result = toDoService.getPageCard(pageable, user1);
+
+		//then
+		assertEquals("username1", result.getPageList().getContent().get(0).getUsername());
+		assertEquals("username2",result.getPageList().getContent().get(1).getUsername());
+		assertEquals("testTitle1", result.getPageList().getContent().get(0).getTitle());
+		assertEquals("testTitle2", result.getPageList().getContent().get(1).getTitle());
+		System.out.println("통과");
+	}
+
+
 
 	@Nested
 	class 카드_제목으로_검색_테스트 {

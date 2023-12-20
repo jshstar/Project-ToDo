@@ -15,19 +15,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CommentService {
 
-    private final CommentRepository commentRepository; // 댓글 Repository
+        private final CommentRepository commentRepository; // 댓글 Repository
 
-    private final ToDoService toDoService; // 카드 Repository
+        private final ToDoService toDoService; // 카드 Repository
 
     public CommentService(CommentRepository commentRepository, ToDoService toDoService) {
-        this.commentRepository = commentRepository;
-        this.toDoService = toDoService;
-    }
+            this.commentRepository = commentRepository;
+            this.toDoService = toDoService;
+        }
 
-    @Transactional
-    public CommentResponseDto createComment(Long id ,CommentRequestDto commentRequestDto, User user) throws IllegalAccessException {
-        ToDoCard card = toDoService.findCard(id); // 댓글 달고자 하는 카드 정보 탐색 및 영속성 상태로 저장
-        Comment comment = new Comment(commentRequestDto.getComment(),user, card);
+        @Transactional
+        public CommentResponseDto createComment(Long id ,CommentRequestDto commentRequestDto, User user) throws IllegalAccessException {
+            ToDoCard card = toDoService.findCard(id); // 댓글 달고자 하는 카드 정보 탐색 및 영속성 상태로 저장
+            Comment comment = new Comment(commentRequestDto.getComment(),user, card);
 
         if(card.isHidden()) // 카드 비공개 check
         {
