@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ToDoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project_todo</a> &gt; <a href="index.source.html" class="el_package">com.sparta.project_todo.todocard.service</a> &gt; <span class="el_source">ToDoService.java</span></div><h1>ToDoService.java</h1><pre class="source lang-java linenums">package com.sparta.project_todo.todocard.service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.sparta.project_todo.security.UserDetailsImpl;
+import com.sparta.project_todo.todocard.dto.CompleteToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.GetAllToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.HiddenToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.SelectToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoPageCardListResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoPageCardResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoRequestDto;
+import com.sparta.project_todo.todocard.dto.ToDoResponseDto;
+import com.sparta.project_todo.todocard.entity.ToDoCard;
+import com.sparta.project_todo.todocard.repository.ToDoRepository;
+import com.sparta.project_todo.user.entity.User;
+
+@Service
+public class ToDoService {
+
+    private final ToDoRepository toDoRepository; // ToDoDB 정보 가져오기
+
+<span class="fc" id="L29">    public ToDoService(ToDoRepository toDoRepository) {</span>
+<span class="fc" id="L30">        this.toDoRepository = toDoRepository;</span>
+<span class="fc" id="L31">    }</span>
+
+    // 할일카드 작성기능
+    public ToDoResponseDto createCard(ToDoRequestDto cardRequestDto, User user) {
+        // RequestDto = Entity
+<span class="nc" id="L36">        ToDoCard card = new ToDoCard(cardRequestDto, user);</span>
+
+        //DB 저장
+<span class="nc" id="L39">        ToDoCard saveBoard = toDoRepository.save(card);</span>
+<span class="nc" id="L40">        return new ToDoResponseDto(saveBoard);</span>
+    }
+
+
+    // 카드 목록 조회
+    public List&lt;GetAllToDoResponseDto&gt; getCards(UserDetailsImpl user) {
+
+<span class="nc" id="L47">        List&lt;ToDoCard&gt; toDoCardsList = toDoRepository.findAllByCompleteOrderByCreatedAtDesc(false); // 완료처리 안된 카드 목록 가져오기</span>
+<span class="nc" id="L48">        List&lt;ToDoCard&gt; getToDoCardList = new ArrayList&lt;&gt;(); // 원하는 정보를 담을 공간 생성</span>
+
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        String currentUsername = user != null ? user.getUsername() : &quot;&quot;; // 유저 로그인 확인(유저가 작성한 카드 유무 확인 )</span>
+        String toDoCardUsername; // 카드목록의 유저이름 정보를 담을 변수
+
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        for (ToDoCard todoCard : toDoCardsList) {</span>
+<span class="nc" id="L54">            toDoCardUsername = todoCard.getUser().getUsername(); // column당 유저의 이름 담기</span>
+
+<span class="nc bnc" id="L56" title="All 2 branches missed.">            if (todoCard.isHidden()) { // 카드 정보에 비공개 처리 유무 확인</span>
+
+<span class="nc bnc" id="L58" title="All 2 branches missed.">                if (toDoCardUsername.equals(currentUsername)) { // 카드의 유저 이름과 조회하는 유저의 이름 일치 확인</span>
+<span class="nc" id="L59">                    getToDoCardList.add(todoCard); // 일치한다면 조회 목록에 추가</span>
+                }
+            } else {
+<span class="nc" id="L62">                getToDoCardList.add(todoCard);</span>
+            } // 비공개 처리가 안돼 있는 정보 추가
+<span class="nc" id="L64">        }</span>
+<span class="nc" id="L65">        return getToDoCardList.stream().map(GetAllToDoResponseDto::new).toList(); // 결과 리턴</span>
+    }
+
+    // 페이징 조회
+    public ToDoPageCardListResponseDto getPageCard(Pageable pageable, UserDetailsImpl userDetails){
+
+<span class="nc" id="L71">        Page&lt;ToDoCard&gt; pageCardList = toDoRepository.findPageCard(pageable, userDetails.getUser().getId());</span>
+<span class="nc" id="L72">		return new ToDoPageCardListResponseDto(pageCardList);</span>
+    }
+
+    //선택한 카드 조회 기능
+    public SelectToDoResponseDto selectGetCards(Long id){
+
+<span class="nc" id="L78">        ToDoCard card = findCard(id); // 번호에 따른 카드정보 탐색 및 영속성 저장</span>
+
+<span class="nc" id="L80">        return new SelectToDoResponseDto(card);</span>
+    }
+
+    // 제목으로 검색
+    public List&lt;GetAllToDoResponseDto&gt; getTitleCards(String title, UserDetailsImpl user) {
+
+        List&lt;GetAllToDoResponseDto&gt; titleList;
+
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if(user != null) {</span>
+<span class="nc" id="L89">            titleList = toDoRepository.titleQuery(title, user.getUser().getId()) // Query 문을 통한 유저 정보 가져오기</span>
+<span class="nc" id="L90">                    .stream().map(GetAllToDoResponseDto::new).toList();</span>
+        } else {
+<span class="nc" id="L92">            titleList = toDoRepository.titleNotUserQuery(title) // Query 문을 통한 로그인 안한 유저 정보 가져오기</span>
+<span class="nc" id="L93">                    .stream().map(GetAllToDoResponseDto::new).toList();</span>
+        }
+
+<span class="nc" id="L96">        return titleList;</span>
+    }
+
+    // 선택한 카드 수정 기능
+    @Transactional
+    public SelectToDoResponseDto updateCard(Long id, ToDoRequestDto cardRequestDto, User user) throws IllegalAccessException {
+<span class="nc" id="L102">        ToDoCard card = findCard(id); // 수정할 카드정보 탐색 및 영속성 저장</span>
+
+<span class="nc" id="L104">        matchUsername(card, user);  // 카드의 유저 이름과 수정할 유저의 이름이 같은지 확인</span>
+<span class="nc" id="L105">        card.update(cardRequestDto); // 같다면 수정</span>
+
+<span class="nc" id="L107">        return new SelectToDoResponseDto(card); // 수정 정보 반환</span>
+
+    }
+
+    // 선택한 카드 완료 기능
+    @Transactional
+    public CompleteToDoResponseDto completeCard(Long id, User user) throws IllegalAccessException {
+<span class="nc" id="L114">        ToDoCard card = findCard(id); // 완료 처리할 카드정보 탐색 및 영속성 저장</span>
+
+<span class="nc" id="L116">        matchUsername(card, user); // 카드의 유저 이름과 완료처리할 유저의 이름이 같은지 확인</span>
+<span class="nc" id="L117">        card.complete(true); // 같다면 완료처리</span>
+
+<span class="nc" id="L119">        return new CompleteToDoResponseDto(card); // 완료 정보 반환</span>
+    }
+
+
+    @Transactional
+    public HiddenToDoResponseDto hiddenCard(Long id, User user) throws IllegalAccessException {
+<span class="nc" id="L125">        ToDoCard card = findCard(id); // 비공개 처리할 카드정보 탐색 및 영속성 저장</span>
+
+<span class="nc" id="L127">        matchUsername(card, user);  // 카드의 유저 이름과 완료처리할 유저의 이름이 같은지 확인</span>
+<span class="nc" id="L128">        card.hiddenFlag(true); // 비공개 처리</span>
+
+<span class="nc" id="L130">        return new HiddenToDoResponseDto(card);</span>
+    }
+
+    // 선택한 게시글 삭제 기능
+    public Long deleteCard(Long id, User user) throws IllegalAccessException {
+<span class="nc" id="L135">        ToDoCard card = findCard(id); // 삭제 처리할 카드 탐색 및 영속성 저장</span>
+
+<span class="nc" id="L137">        matchUsername(card, user);  // 카드의 유저 이름과 삭제처리할 유저의 이름이 같은지 확인</span>
+<span class="nc" id="L138">        toDoRepository.delete(card); // 카드삭제</span>
+
+<span class="nc" id="L140">        return id; // 아이디 반환</span>
+    }
+
+    // 카드 탐색
+    public ToDoCard findCard(Long id) {
+<span class="nc" id="L145">        return toDoRepository.findById(id).orElseThrow(() -&gt;</span>
+<span class="nc" id="L146">                new IllegalArgumentException(&quot;선택한 카드는 존재하지 않습니다.&quot;)</span>
+        );
+    }
+
+    // 카드의 유저이름과 접근한 유저의 이름이 같은지 확인
+    public void matchUsername(ToDoCard card, User user) throws IllegalAccessException{
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if(!card.getUser().getUsername().equals(user.getUsername()))</span>
+<span class="nc" id="L153">            throw new IllegalAccessException(&quot;접근할 수 없는 카드입니다.&quot;);</span>
+<span class="nc" id="L154">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

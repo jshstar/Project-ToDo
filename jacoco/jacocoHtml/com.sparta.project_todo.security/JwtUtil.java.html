@@ -114,8 +114,16 @@ import java.util.Date;
     }
 
     // HttpServletRequest 에서 Cookie Value : JWT 가져오기
-    public String getTokenFromRequest(HttpServletRequest req) {
-<span class="nc" id="L118">        return req.getHeader(AUTHORIZATION_HEADER);</span>
+    public String getTokenFromRequestHeader(HttpServletRequest req) {
+<span class="nc" id="L118">        String tokenValue = req.getHeader(AUTHORIZATION_HEADER);</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (!StringUtils.hasText(tokenValue)) {</span>
+<span class="nc" id="L120">            return null;</span>
+        }
+        // JWT 토큰 substring
+<span class="nc" id="L123">        tokenValue = substringToken(tokenValue);</span>
+<span class="nc" id="L124">        validateToken(tokenValue);</span>
+
+<span class="nc" id="L126">        return tokenValue;</span>
     }
 
 }

@@ -9,61 +9,58 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import lombok.Generated;
-
-
 public class UserDetailsImpl implements UserDetails {
 
     private final User user;
 
-<span class="fc" id="L19">    public UserDetailsImpl(User user) {</span>
-<span class="fc" id="L20">        this.user = user;</span>
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L16">    public UserDetailsImpl(User user) {</span>
+<span class="fc" id="L17">        this.user = user;</span>
+<span class="fc" id="L18">    }</span>
 
     public User getUser() {
-<span class="fc" id="L24">        return user;</span>
+<span class="fc" id="L21">        return user;</span>
     }
 
     @Override
     public String getPassword() {
-<span class="nc" id="L29">        return user.getPassword();</span>
+<span class="nc" id="L26">        return user.getPassword();</span>
     }
 
     @Override
     public String getUsername() {
-<span class="fc" id="L34">        return user.getUsername();</span>
+<span class="nc" id="L31">        return user.getUsername();</span>
     }
 
     @Override
     public Collection&lt;? extends GrantedAuthority&gt; getAuthorities() {
-<span class="fc" id="L39">        UserRoleEnum role = user.getRole();</span>
-<span class="fc" id="L40">        String authority = role.getAuthority();</span>
+<span class="nc" id="L36">        UserRoleEnum role = user.getRole();</span>
+<span class="nc" id="L37">        String authority = role.getAuthority();</span>
 
-<span class="fc" id="L42">        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);</span>
-<span class="fc" id="L43">        Collection&lt;GrantedAuthority&gt; authorities = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L44">        authorities.add(simpleGrantedAuthority);</span>
+<span class="nc" id="L39">        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);</span>
+<span class="nc" id="L40">        Collection&lt;GrantedAuthority&gt; authorities = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L41">        authorities.add(simpleGrantedAuthority);</span>
 
-<span class="fc" id="L46">        return authorities;</span>
+<span class="nc" id="L43">        return authorities;</span>
     }
 
     @Override
     public boolean isAccountNonExpired() {
-<span class="nc" id="L51">        return true;</span>
+<span class="nc" id="L48">        return true;</span>
     }
 
     @Override
     public boolean isAccountNonLocked() {
-<span class="nc" id="L56">        return true;</span>
+<span class="nc" id="L53">        return true;</span>
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-<span class="nc" id="L61">        return true;</span>
+<span class="nc" id="L58">        return true;</span>
     }
 
     @Override
     public boolean isEnabled() {
-<span class="nc" id="L66">        return true;</span>
+<span class="nc" id="L63">        return true;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

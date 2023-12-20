@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ToDoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project_todo</a> &gt; <a href="index.source.html" class="el_package">com.sparta.project_todo.todocard.controller</a> &gt; <span class="el_source">ToDoController.java</span></div><h1>ToDoController.java</h1><pre class="source lang-java linenums">package com.sparta.project_todo.todocard.controller;
+
+
+import static com.sparta.project_todo.global.constant.ResponseCode.*;
+
+import com.sparta.project_todo.global.dto.SuccessResponse;
+import com.sparta.project_todo.todocard.dto.CompleteToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.GetAllToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.HiddenToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.SelectToDoResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoPageCardListResponseDto;
+import com.sparta.project_todo.todocard.dto.ToDoRequestDto;
+import com.sparta.project_todo.security.UserDetailsImpl;
+import com.sparta.project_todo.todocard.dto.ToDoResponseDto;
+import com.sparta.project_todo.todocard.service.ToDoService;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/api&quot;)
+public class ToDoController {
+
+    private final ToDoService toDoService;
+
+<span class="nc" id="L33">    public ToDoController(ToDoService boardService) {</span>
+<span class="nc" id="L34">        this.toDoService = boardService;</span>
+<span class="nc" id="L35">    }</span>
+
+    // 게시글 작성
+    @PostMapping(&quot;/todo&quot;)
+    public ResponseEntity&lt;SuccessResponse&gt; createCard(@RequestBody ToDoRequestDto requestDto,
+                                        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+<span class="nc" id="L41">        ToDoResponseDto toDoResponseDto = toDoService.createCard(requestDto, userDetails.getUser());</span>
+<span class="nc" id="L42">        return ResponseEntity.status(SUCCESS_CREATE_CARD.getHttpStatus().value())</span>
+<span class="nc" id="L43">            .body(new SuccessResponse(SUCCESS_CREATE_CARD,toDoResponseDto));</span>
+    }
+
+    // 피드 조회
+    @GetMapping(&quot;/todo&quot;)
+    public ResponseEntity&lt;?&gt; getPagingCard(Pageable pageable , @AuthenticationPrincipal UserDetailsImpl userDetails){
+<span class="nc" id="L49">        ToDoPageCardListResponseDto toDoPageCardListResponseDto  = toDoService.getPageCard(pageable, userDetails);</span>
+<span class="nc" id="L50">        return ResponseEntity.status(SUCCESS_GET_PAGE_CARD.getHttpStatus().value())</span>
+<span class="nc" id="L51">            .body(new SuccessResponse(SUCCESS_GET_PAGE_CARD,toDoPageCardListResponseDto));</span>
+    }
+
+    // 선택된 카드 조회
+    @GetMapping(&quot;/todo/{id}&quot;)
+    public ResponseEntity&lt;SuccessResponse&gt; selectGetCard(@PathVariable Long id) {
+<span class="nc" id="L57">        SelectToDoResponseDto selectToDoResponseDto = toDoService.selectGetCards(id);</span>
+<span class="nc" id="L58">        return ResponseEntity.status(SUCCESS_GET_SELECT_CARD.getHttpStatus().value())</span>
+<span class="nc" id="L59">            .body(new SuccessResponse(SUCCESS_GET_SELECT_CARD, selectToDoResponseDto));</span>
+    }
+
+    // 제목으로 카드목록 조회
+    @GetMapping(&quot;/todo/title&quot;)
+    public ResponseEntity&lt;SuccessResponse&gt; getTitleCard(@RequestParam(value = &quot;title&quot;) String title,
+                                          @AuthenticationPrincipal UserDetailsImpl userDetails) {
+<span class="nc" id="L66">        List&lt;GetAllToDoResponseDto&gt; getAllToDoResponseDto = toDoService.getTitleCards(title, userDetails);</span>
+<span class="nc" id="L67">        return ResponseEntity.status(SUCCESS_GET_TITLE_CARD.getHttpStatus().value())</span>
+<span class="nc" id="L68">            .body(new SuccessResponse(SUCCESS_GET_TITLE_CARD, getAllToDoResponseDto));</span>
+    }
+
+
+    // 카드 업데이트
+    @PutMapping(&quot;/todo/{id}&quot;)
+    public ResponseEntity&lt;SuccessResponse&gt; updateCard(@PathVariable Long id,
+                                        @RequestBody ToDoRequestDto requestDto,
+                                        @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException {
+<span class="nc" id="L77">        SelectToDoResponseDto selectToDoResponseDto = toDoService.updateCard(id, requestDto, userDetails.getUser());</span>
+<span class="nc" id="L78">        return ResponseEntity.status(SUCCESS_UPDATE_CARD.getHttpStatus().value())</span>
+<span class="nc" id="L79">            .body(new SuccessResponse(SUCCESS_UPDATE_CARD, selectToDoResponseDto));</span>
+    }
+
+    // 카드 완료 업데이트
+    @PutMapping(&quot;/todo/{id}/complete&quot;)
+    public ResponseEntity&lt;SuccessResponse&gt; completeCard(@PathVariable Long id,
+                                          @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException {
+<span class="nc" id="L86">        CompleteToDoResponseDto completeToDoResponseDto = toDoService.completeCard(id, userDetails.getUser());</span>
+<span class="nc" id="L87">        return ResponseEntity.status(SUCCESS_COMPLETE.getHttpStatus().value())</span>
+<span class="nc" id="L88">            .body(new SuccessResponse(SUCCESS_COMPLETE, completeToDoResponseDto));</span>
+    }
+
+    // 개시글 비공개 처리
+    @PutMapping(&quot;/todo/{id}/hidden&quot;)
+    public ResponseEntity&lt;SuccessResponse&gt; hidden(@PathVariable Long id,
+                                    @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException{
+<span class="nc" id="L95">        HiddenToDoResponseDto hiddenToDoResponseDto = toDoService.hiddenCard(id, userDetails.getUser());</span>
+<span class="nc" id="L96">        return ResponseEntity.status(SUCCESS_HIDDEN.getHttpStatus().value())</span>
+<span class="nc" id="L97">            .body(new SuccessResponse(SUCCESS_HIDDEN, hiddenToDoResponseDto));</span>
+    }
+
+
+    // 카드 삭제
+    @DeleteMapping(&quot;/todo/{id}&quot;)
+    public ResponseEntity&lt;SuccessResponse&gt; deleteCard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException{
+<span class="nc" id="L104">        Long deleteId = toDoService.deleteCard(id, userDetails.getUser());</span>
+<span class="nc" id="L105">        return ResponseEntity.status(SUCCESS_DELETE.getHttpStatus().value())</span>
+<span class="nc" id="L106">            .body(new SuccessResponse(SUCCESS_DELETE, userDetails.getUser().getUsername()</span>
+                + &quot;님의 &quot; + deleteId + &quot;번째 글을 삭제 완료했습니다.&quot;));
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

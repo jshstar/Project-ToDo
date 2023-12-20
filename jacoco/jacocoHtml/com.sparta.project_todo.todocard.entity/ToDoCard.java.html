@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ToDoCard.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project_todo</a> &gt; <a href="index.source.html" class="el_package">com.sparta.project_todo.todocard.entity</a> &gt; <span class="el_source">ToDoCard.java</span></div><h1>ToDoCard.java</h1><pre class="source lang-java linenums">package com.sparta.project_todo.todocard.entity;
+
+
+import com.sparta.project_todo.comment.entity.Comment;
+import com.sparta.project_todo.todocard.dto.ToDoRequestDto;
+import com.sparta.project_todo.global.entity.Timestamped;
+import com.sparta.project_todo.user.entity.User;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Getter
+@Table(name = &quot;todo&quot;)
+<span class="nc" id="L20">@NoArgsConstructor</span>
+public class ToDoCard extends Timestamped {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+<span class="nc" id="L24">    private Long id; // 카드 번호</span>
+
+    @Column(name = &quot;title&quot;)
+    @NotBlank
+<span class="nc" id="L28">    private String title; // 카드 제목</span>
+
+    @Column(name = &quot;contents&quot;, length = 1000)
+<span class="nc" id="L31">    private String contents; // 카드 내용</span>
+
+    @Column(name = &quot;complete&quot;)
+<span class="nc" id="L34">    private boolean complete; // 완료 여부</span>
+
+    @Column(name = &quot;hidden&quot;)
+<span class="nc" id="L37">    private boolean hidden; // 비공개 여부</span>
+
+    @ManyToOne
+    @JoinColumn(name = &quot;user_id&quot;)
+<span class="nc" id="L41">    private User user; // 유저 정보</span>
+
+<span class="pc" id="L43">    @OneToMany(mappedBy = &quot;toDoCard&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
+<span class="nc" id="L44">    private List&lt;Comment&gt; comments = new ArrayList&lt;&gt;(); // 댓글 내용이 담긴 목록</span>
+
+    // 카드 작성
+<span class="fc" id="L47">    public ToDoCard(ToDoRequestDto cardRequestDto, User user) {</span>
+<span class="fc" id="L48">        this.title = cardRequestDto.getTitle();</span>
+<span class="fc" id="L49">        this.contents = cardRequestDto.getContents();</span>
+<span class="fc" id="L50">        this.user = user;</span>
+<span class="fc" id="L51">    }</span>
+
+    // 카드 수정
+    public void update(ToDoRequestDto requestDto) {
+<span class="nc" id="L55">        this.title = requestDto.getTitle();</span>
+<span class="nc" id="L56">        this.contents = requestDto.getContents();</span>
+<span class="nc" id="L57">    }</span>
+
+    // 카드 할일 완료처리
+    public void complete(boolean flag) {
+<span class="nc" id="L61">        this.complete = flag;</span>
+<span class="nc" id="L62">    }</span>
+
+    // 카드 비공개처리
+    public void hiddenFlag(boolean flag) {
+<span class="fc" id="L66">        this.hidden = flag;</span>
+<span class="fc" id="L67">    }</span>
+
+    // 댓글 추가
+    public void addComment(Comment comment) {
+<span class="nc" id="L71">        comment.matchToDoCard(this);</span>
+<span class="nc" id="L72">        this.comments.add(comment);</span>
+<span class="nc" id="L73">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

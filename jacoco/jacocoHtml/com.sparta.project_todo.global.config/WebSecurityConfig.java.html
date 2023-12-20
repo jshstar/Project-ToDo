@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WebSecurityConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project_todo</a> &gt; <a href="index.source.html" class="el_package">com.sparta.project_todo.global.config</a> &gt; <span class="el_source">WebSecurityConfig.java</span></div><h1>WebSecurityConfig.java</h1><pre class="source lang-java linenums">package com.sparta.project_todo.global.config;
+
+import com.sparta.project_todo.security.JwtAuthenticationFilter;
+import com.sparta.project_todo.security.JwtAuthorizationFilter;
+import com.sparta.project_todo.security.JwtUtil;
+import com.sparta.project_todo.security.UserDetailsServiceImpl;
+import lombok.Getter;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+@EnableWebSecurity // Spring Security 지원을 가능하게 함
+public class WebSecurityConfig {
+
+    private final JwtUtil jwtUtil;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final AuthenticationConfiguration authenticationConfiguration;
+
+<span class="nc" id="L28">    public WebSecurityConfig(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, AuthenticationConfiguration authenticationConfiguration) {</span>
+<span class="nc" id="L29">        this.jwtUtil = jwtUtil;</span>
+<span class="nc" id="L30">        this.userDetailsService = userDetailsService;</span>
+<span class="nc" id="L31">        this.authenticationConfiguration = authenticationConfiguration;</span>
+<span class="nc" id="L32">    }</span>
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+<span class="nc" id="L36">        return configuration.getAuthenticationManager();</span>
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+<span class="nc" id="L41">        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);</span>
+<span class="nc" id="L42">        filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));</span>
+<span class="nc" id="L43">        return filter;</span>
+    }
+
+    @Bean
+    public JwtAuthorizationFilter jwtAuthorizationFilter() {
+<span class="nc" id="L48">        return new JwtAuthorizationFilter(jwtUtil, userDetailsService);</span>
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // CSRF 설정
+<span class="nc" id="L54">        http.csrf((csrf) -&gt; csrf.disable());</span>
+
+        // 기본 설정인 Session 방식은 사용하지 않고 JWT 방식을 사용하기 위한 설정
+<span class="nc" id="L57">        http.sessionManagement((sessionManagement) -&gt;</span>
+<span class="nc" id="L58">                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)</span>
+        );
+
+<span class="nc" id="L61">        http.authorizeHttpRequests((authorizeHttpRequests) -&gt;</span>
+                authorizeHttpRequests
+<span class="nc" id="L63">                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정</span>
+<span class="nc" id="L64">                        .requestMatchers(&quot;/api/user/**&quot;).permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가</span>
+<span class="nc" id="L65">                        .requestMatchers(HttpMethod.GET, &quot;/api/todo/**&quot;).permitAll()</span>
+<span class="nc" id="L66">                        .anyRequest().authenticated()// 그 외 모든 요청 인증처리</span>
+        );
+
+//        http.formLogin((formLogin) -&gt;
+//                formLogin
+//                        .loginPage(&quot;/api/user/login-page&quot;).permitAll()
+//        );
+
+        // 필터 관리
+<span class="nc" id="L75">        http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);</span>
+<span class="nc" id="L76">        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);</span>
+
+<span class="nc" id="L78">        return http.build();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>

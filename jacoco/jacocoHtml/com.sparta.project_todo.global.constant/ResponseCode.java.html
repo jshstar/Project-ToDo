@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResponseCode.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">project_todo</a> &gt; <a href="index.source.html" class="el_package">com.sparta.project_todo.global.constant</a> &gt; <span class="el_source">ResponseCode.java</span></div><h1>ResponseCode.java</h1><pre class="source lang-java linenums">package com.sparta.project_todo.global.constant;
+
+import static org.springframework.http.HttpStatus.*;
+
+import org.springframework.http.HttpStatus;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+<span class="nc" id="L10">@Getter</span>
+<span class="nc" id="L11">@AllArgsConstructor</span>
+public enum ResponseCode {
+
+<span class="nc" id="L14">	SUCCESS_REISSUANCETOKEN(OK, &quot;토큰이 재발급되었습니다.&quot;),</span>
+<span class="nc" id="L15">	SUCCESS_SIGNUP(OK, &quot;회원가입이 성공하였습니다,&quot;),</span>
+<span class="nc" id="L16">	SUCCESS_LOGOUT(OK, &quot;로그아웃이 성공하였습니다.&quot;),</span>
+<span class="nc" id="L17">	SUCCESS_EDITPROFILE(OK, &quot;내정보 수정이 성공하였습니다.&quot;),</span>
+
+<span class="nc" id="L19">	SUCCESS_CREATE_CARD(CREATED,&quot;카드 생성 성공&quot;),</span>
+<span class="nc" id="L20">	SUCCESS_GET_CARD(OK, &quot;카드 조회 성공&quot;),</span>
+<span class="nc" id="L21">	SUCCESS_GET_SELECT_CARD(OK, &quot;카드 선택 조회 성공&quot;),</span>
+<span class="nc" id="L22">	SUCCESS_GET_TITLE_CARD(OK, &quot;카트 제목 조회 성공&quot;),</span>
+<span class="nc" id="L23">	SUCCESS_UPDATE_CARD(OK, &quot;카드 업데이트 성공&quot;),</span>
+<span class="nc" id="L24">	SUCCESS_COMPLETE(OK, &quot;카드 완료처리 완료&quot;),</span>
+<span class="nc" id="L25">	SUCCESS_HIDDEN(OK,&quot;카드 히튼처리 완료&quot;),</span>
+<span class="nc" id="L26">	SUCCESS_DELETE(OK, &quot;카드 삭제 완료&quot;),</span>
+<span class="nc" id="L27">	SUCCESS_GET_PAGE_CARD(OK, &quot;카드 조회 완료&quot;),</span>
+
+<span class="nc" id="L29">	SUCCESS_CREATE_COMMENT(CREATED, &quot;댓글 달기 성공&quot;),</span>
+<span class="nc" id="L30">	SUCCESS_UPDATE_COMMENT(OK, &quot;댓글 업데이트 성공&quot;),</span>
+<span class="nc" id="L31">	SUCCESS_DELETE_COMMENT(OK, &quot;댓글 삭제 완료&quot;);</span>
+
+
+
+<span class="nc" id="L35">	private final HttpStatus httpStatus;</span>
+<span class="nc" id="L36">	private final String message;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
