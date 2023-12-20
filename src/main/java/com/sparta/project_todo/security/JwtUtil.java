@@ -114,8 +114,16 @@ public class JwtUtil {
     }
 
     // HttpServletRequest 에서 Cookie Value : JWT 가져오기
-    public String getTokenFromRequest(HttpServletRequest req) {
-        return req.getHeader(AUTHORIZATION_HEADER);
+    public String getTokenFromRequestHeader(HttpServletRequest req) {
+        String tokenValue = req.getHeader(AUTHORIZATION_HEADER);
+        if (!StringUtils.hasText(tokenValue)) {
+            return null;
+        }
+        // JWT 토큰 substring
+        tokenValue = substringToken(tokenValue);
+        validateToken(tokenValue);
+
+        return tokenValue;
     }
 
 }
