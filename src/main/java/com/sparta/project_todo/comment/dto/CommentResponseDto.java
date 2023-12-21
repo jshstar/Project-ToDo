@@ -9,16 +9,19 @@ import java.time.LocalDateTime;
 @Getter
 @RequiredArgsConstructor
 public class CommentResponseDto {
-    private final Long id; // 댓글 id
+    private final Long commentId; // 댓글 id
 
     private final String comment; // 댓글 내용
 
     private final LocalDateTime createAt; // 생성 시간
 
+    private final LocalDateTime modifiedAt; // 수정 시간
+
     public CommentResponseDto(Comment comment){
-        this.id = comment.getId();
+        this.commentId = comment.getId();
         this.comment = comment.getComment();
         this.createAt = comment.getCreatedAt();
+        this.modifiedAt = comment.getModifiedAt();
     }
 
 }

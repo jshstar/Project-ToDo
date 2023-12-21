@@ -28,7 +28,8 @@ public enum ResponseCode {
 
 	SUCCESS_CREATE_COMMENT(CREATED, "댓글 달기 성공"),
 	SUCCESS_UPDATE_COMMENT(OK, "댓글 업데이트 성공"),
-	SUCCESS_DELETE_COMMENT(OK, "댓글 삭제 완료");
+	SUCCESS_DELETE_COMMENT(OK, "댓글 삭제 완료"),
+	SUCCESS_GET_COMMENT(OK,"댓글 조회 성공");
 
 
 

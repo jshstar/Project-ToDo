@@ -2,6 +2,7 @@ package com.sparta.project_todo.comment.controller;
 
 import static com.sparta.project_todo.global.constant.ResponseCode.*;
 
+import com.sparta.project_todo.comment.dto.CommentPageResponseDto;
 import com.sparta.project_todo.comment.dto.CommentRequestDto;
 import com.sparta.project_todo.comment.dto.CommentResponseDto;
 import com.sparta.project_todo.global.constant.ResponseCode;
@@ -9,10 +10,12 @@ import com.sparta.project_todo.global.dto.SuccessResponse;
 import com.sparta.project_todo.security.UserDetailsImpl;
 import com.sparta.project_todo.comment.service.CommentService;
 import jakarta.validation.Valid;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
+import org.thymeleaf.standard.util.StandardConditionalCommentUtils;
 
 @RestController
 @RequestMapping("/api")
@@ -25,7 +28,7 @@ public class CommentController {
     }
 
     // 댓글 생성
-    @PostMapping("/todo/comment/{id}")
+    @PostMapping("/todo/{id}/comment")
     public ResponseEntity<SuccessResponse> createComment(@PathVariable(name = "id") Long id,
                                            @Valid @RequestBody CommentRequestDto commentRequestDto,
                                            @AuthenticationPrincipal UserDetailsImpl userDetails) throws IllegalAccessException{
@@ -33,6 +36,13 @@ public class CommentController {
         return ResponseEntity.status(SUCCESS_CREATE_COMMENT.getHttpStatus().value()).body(
             new SuccessResponse(SUCCESS_CREATE_COMMENT, commentResponseDto));
 
+    }
+    // 댓글 페이징 조회
+    @GetMapping("/todo/{toDoId}/comment")
+    public ResponseEntity<SuccessResponse> getPageComment(@PathVariable Long toDoId, Pageable pageable, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        CommentPageResponseDto commentPageResponseDto = commentService.getPageComment(toDoId, pageable, userDetails.getUser());
+        return ResponseEntity.status(SUCCESS_GET_COMMENT.getHttpStatus().value())
+            .body(new SuccessResponse(SUCCESS_GET_COMMENT, commentPageResponseDto));
     }
 
     // 댓글 업데이트

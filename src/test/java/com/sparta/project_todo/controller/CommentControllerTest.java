@@ -105,10 +105,10 @@ class CommentControllerTest {
 				.principal(mockPrincipal)
 			)
 			//then
-			.andExpect(status().isOk())
+			.andExpect(status().isCreated())
 			.andDo(print())
-			.andExpect(jsonPath("$.id").value(result.getId()))
-			.andExpect(jsonPath("$.comment").value(result.getComment()));
+			.andExpect(jsonPath("$.data.id").value(result.getCommentId()))
+			.andExpect(jsonPath("$.data.comment").value(result.getComment()));
 	}
 
 	@Test
@@ -139,8 +139,8 @@ class CommentControllerTest {
 			//then
 			.andExpect(status().isOk())
 			.andDo(print())
-			.andExpect(jsonPath("$.id").value(result.getId()))
-			.andExpect(jsonPath("$.comment").value(result.getComment()));
+			.andExpect(jsonPath("$.data.id").value(result.getId()))
+			.andExpect(jsonPath("$.data.comment").value(result.getComment()));
 
 	}
 

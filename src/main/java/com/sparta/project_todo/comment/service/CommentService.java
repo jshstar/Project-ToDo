@@ -3,12 +3,16 @@ package com.sparta.project_todo.comment.service;
 
 import com.sparta.project_todo.comment.dto.CommentRequestDto;
 import com.sparta.project_todo.comment.dto.CommentResponseDto;
+import com.sparta.project_todo.comment.dto.CommentPageResponseDto;
 import com.sparta.project_todo.comment.entity.Comment;
 import com.sparta.project_todo.todocard.entity.ToDoCard;
 import com.sparta.project_todo.user.entity.User;
 import com.sparta.project_todo.comment.repository.CommentRepository;
 import com.sparta.project_todo.todocard.service.ToDoService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +43,11 @@ public class CommentService {
         commentRepository.save(comment); // 댓글 DB 저장
 
         return new CommentResponseDto(comment); // 댓글 정보 반환
+    }
+
+    public CommentPageResponseDto getPageComment(Long toDoId,Pageable pageable, User user){
+        Slice<Comment> commentPage = commentRepository.findToDoCardComment(toDoId, pageable, user.getId());
+        return new CommentPageResponseDto(commentPage);
     }
 
 
