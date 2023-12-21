@@ -18,7 +18,7 @@ public class UserDetailsImpl implements UserDetails {
 <span class="fc" id="L18">    }</span>
 
     public User getUser() {
-<span class="fc" id="L21">        return user;</span>
+<span class="nc" id="L21">        return user;</span>
     }
 
     @Override
@@ -28,19 +28,19 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public String getUsername() {
-<span class="nc" id="L31">        return user.getUsername();</span>
+<span class="fc" id="L31">        return user.getUsername();</span>
     }
 
     @Override
     public Collection&lt;? extends GrantedAuthority&gt; getAuthorities() {
-<span class="nc" id="L36">        UserRoleEnum role = user.getRole();</span>
-<span class="nc" id="L37">        String authority = role.getAuthority();</span>
+<span class="fc" id="L36">        UserRoleEnum role = user.getRole();</span>
+<span class="fc" id="L37">        String authority = role.getAuthority();</span>
 
-<span class="nc" id="L39">        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);</span>
-<span class="nc" id="L40">        Collection&lt;GrantedAuthority&gt; authorities = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L41">        authorities.add(simpleGrantedAuthority);</span>
+<span class="fc" id="L39">        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);</span>
+<span class="fc" id="L40">        Collection&lt;GrantedAuthority&gt; authorities = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L41">        authorities.add(simpleGrantedAuthority);</span>
 
-<span class="nc" id="L43">        return authorities;</span>
+<span class="fc" id="L43">        return authorities;</span>
     }
 
     @Override

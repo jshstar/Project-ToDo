@@ -8,21 +8,21 @@ import lombok.Data;
 <span class="nc bnc" id="L8" title="All 24 branches missed.">@Data</span>
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SuccessResponse {
-<span class="nc" id="L11">	private int status;</span>
+<span class="fc" id="L11">	private int status;</span>
 
-<span class="nc" id="L13">	private String message;</span>
+<span class="fc" id="L13">	private String message;</span>
 
-<span class="nc" id="L15">	private Object data;</span>
+<span class="fc" id="L15">	private Object data;</span>
 
 <span class="nc" id="L17">	public SuccessResponse(ResponseCode successCode){</span>
 <span class="nc" id="L18">		this.status = successCode.getHttpStatus().value();</span>
 <span class="nc" id="L19">		this.message = successCode.getMessage();</span>
 <span class="nc" id="L20">	}</span>
-<span class="nc" id="L21">	public SuccessResponse(ResponseCode successCode, Object data){</span>
-<span class="nc" id="L22">		this.status = successCode.getHttpStatus().value();</span>
-<span class="nc" id="L23">		this.message = successCode.getMessage();</span>
-<span class="nc" id="L24">		this.data = data;</span>
-<span class="nc" id="L25">	}</span>
+<span class="fc" id="L21">	public SuccessResponse(ResponseCode successCode, Object data){</span>
+<span class="fc" id="L22">		this.status = successCode.getHttpStatus().value();</span>
+<span class="fc" id="L23">		this.message = successCode.getMessage();</span>
+<span class="fc" id="L24">		this.data = data;</span>
+<span class="fc" id="L25">	}</span>
 <span class="nc" id="L26">	public SuccessResponse(int status, String message ) {</span>
 <span class="nc" id="L27">		this.status = status;</span>
 <span class="nc" id="L28">		this.message = message;</span>

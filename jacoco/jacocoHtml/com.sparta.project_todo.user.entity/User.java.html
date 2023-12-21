@@ -16,14 +16,14 @@ public class User {
 <span class="nc" id="L16">    private Long id; // 유저 id</span>
 
     @Column(nullable = false, unique = true)
-<span class="nc" id="L19">    private String username; // ID</span>
+<span class="fc" id="L19">    private String username; // ID</span>
 
     @Column(nullable = false)
 <span class="nc" id="L22">    private String password; // PW</span>
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)// 이넘 사용시 데이터 저장 어노테이션
-<span class="nc" id="L26">    private UserRoleEnum role; // 유저 권한 정보</span>
+<span class="fc" id="L26">    private UserRoleEnum role; // 유저 권한 정보</span>
 
 <span class="fc" id="L28">    public User(String username, String password, UserRoleEnum role) {</span>
 <span class="fc" id="L29">        this.username = username;</span>

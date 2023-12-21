@@ -21,14 +21,14 @@ import java.util.List;
 public class ToDoCard extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<span class="nc" id="L24">    private Long id; // 카드 번호</span>
+<span class="fc" id="L24">    private Long id; // 카드 번호</span>
 
     @Column(name = &quot;title&quot;)
     @NotBlank
-<span class="nc" id="L28">    private String title; // 카드 제목</span>
+<span class="fc" id="L28">    private String title; // 카드 제목</span>
 
     @Column(name = &quot;contents&quot;, length = 1000)
-<span class="nc" id="L31">    private String contents; // 카드 내용</span>
+<span class="fc" id="L31">    private String contents; // 카드 내용</span>
 
     @Column(name = &quot;complete&quot;)
 <span class="nc" id="L34">    private boolean complete; // 완료 여부</span>
@@ -38,7 +38,7 @@ public class ToDoCard extends Timestamped {
 
     @ManyToOne
     @JoinColumn(name = &quot;user_id&quot;)
-<span class="nc" id="L41">    private User user; // 유저 정보</span>
+<span class="fc" id="L41">    private User user; // 유저 정보</span>
 
 <span class="pc" id="L43">    @OneToMany(mappedBy = &quot;toDoCard&quot;, cascade = CascadeType.ALL, orphanRemoval = true)</span>
 <span class="nc" id="L44">    private List&lt;Comment&gt; comments = new ArrayList&lt;&gt;(); // 댓글 내용이 담긴 목록</span>
@@ -63,8 +63,8 @@ public class ToDoCard extends Timestamped {
 
     // 카드 비공개처리
     public void hiddenFlag(boolean flag) {
-<span class="fc" id="L66">        this.hidden = flag;</span>
-<span class="fc" id="L67">    }</span>
+<span class="nc" id="L66">        this.hidden = flag;</span>
+<span class="nc" id="L67">    }</span>
 
     // 댓글 추가
     public void addComment(Comment comment) {

@@ -30,9 +30,9 @@ public class ToDoController {
 
     private final ToDoService toDoService;
 
-<span class="nc" id="L33">    public ToDoController(ToDoService boardService) {</span>
-<span class="nc" id="L34">        this.toDoService = boardService;</span>
-<span class="nc" id="L35">    }</span>
+<span class="fc" id="L33">    public ToDoController(ToDoService boardService) {</span>
+<span class="fc" id="L34">        this.toDoService = boardService;</span>
+<span class="fc" id="L35">    }</span>
 
     // 게시글 작성
     @PostMapping(&quot;/todo&quot;)
@@ -46,9 +46,9 @@ public class ToDoController {
     // 피드 조회
     @GetMapping(&quot;/todo&quot;)
     public ResponseEntity&lt;?&gt; getPagingCard(Pageable pageable , @AuthenticationPrincipal UserDetailsImpl userDetails){
-<span class="nc" id="L49">        ToDoPageCardListResponseDto toDoPageCardListResponseDto  = toDoService.getPageCard(pageable, userDetails);</span>
-<span class="nc" id="L50">        return ResponseEntity.status(SUCCESS_GET_PAGE_CARD.getHttpStatus().value())</span>
-<span class="nc" id="L51">            .body(new SuccessResponse(SUCCESS_GET_PAGE_CARD,toDoPageCardListResponseDto));</span>
+<span class="fc" id="L49">        ToDoPageCardListResponseDto toDoPageCardListResponseDto  = toDoService.getPageCard(pageable, userDetails);</span>
+<span class="fc" id="L50">        return ResponseEntity.status(SUCCESS_GET_PAGE_CARD.getHttpStatus().value())</span>
+<span class="fc" id="L51">            .body(new SuccessResponse(SUCCESS_GET_PAGE_CARD,toDoPageCardListResponseDto));</span>
     }
 
     // 선택된 카드 조회

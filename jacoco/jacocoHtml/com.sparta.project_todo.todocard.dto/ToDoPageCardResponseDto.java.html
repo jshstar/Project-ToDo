@@ -10,23 +10,23 @@ import lombok.Getter;
 @Getter
 public class ToDoPageCardResponseDto {
 
-<span class="nc" id="L13">	private final Long toDoId; // 카드 id</span>
+<span class="fc" id="L13">	private final Long toDoId; // 카드 id</span>
 
-<span class="nc" id="L15">	private final String title; // 카드 제목</span>
+<span class="fc" id="L15">	private final String title; // 카드 제목</span>
 
-<span class="nc" id="L17">	private final String username; // 유저 이름</span>
+<span class="fc" id="L17">	private final String username; // 유저 이름</span>
 
-<span class="nc" id="L19">	private final String contents; // 내용</span>
+<span class="fc" id="L19">	private final String contents; // 내용</span>
 
-<span class="nc" id="L21">	private final LocalDateTime createdAt; // 생성 시간</span>
+<span class="fc" id="L21">	private final LocalDateTime createdAt; // 생성 시간</span>
 
-<span class="nc" id="L23">	public ToDoPageCardResponseDto(ToDoCard card) {</span>
-<span class="nc" id="L24">		this.toDoId = card.getId();</span>
-<span class="nc" id="L25">		this.title = card.getTitle();</span>
-<span class="nc" id="L26">		this.username = card.getUser().getUsername();</span>
-<span class="nc" id="L27">		this.contents = card.getContents();</span>
-<span class="nc" id="L28">		this.createdAt = card.getCreatedAt();</span>
-<span class="nc" id="L29">	}</span>
+<span class="fc" id="L23">	public ToDoPageCardResponseDto(ToDoCard card) {</span>
+<span class="fc" id="L24">		this.toDoId = card.getId();</span>
+<span class="fc" id="L25">		this.title = card.getTitle();</span>
+<span class="fc" id="L26">		this.username = card.getUser().getUsername();</span>
+<span class="fc" id="L27">		this.contents = card.getContents();</span>
+<span class="fc" id="L28">		this.createdAt = card.getCreatedAt();</span>
+<span class="fc" id="L29">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.9.202303310957</span></div></body></html>
