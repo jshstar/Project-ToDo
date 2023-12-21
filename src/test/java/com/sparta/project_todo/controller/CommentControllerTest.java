@@ -139,7 +139,7 @@ class CommentControllerTest {
 			//then
 			.andExpect(status().isOk())
 			.andDo(print())
-			.andExpect(jsonPath("$.data.id").value(result.getId()))
+			.andExpect(jsonPath("$.data.id").value(result.getCommentId()))
 			.andExpect(jsonPath("$.data.comment").value(result.getComment()));
 
 	}
