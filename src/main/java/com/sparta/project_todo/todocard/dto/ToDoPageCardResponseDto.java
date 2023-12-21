@@ -20,12 +20,15 @@ public class ToDoPageCardResponseDto {
 
 	private final LocalDateTime createdAt; // 생성 시간
 
+	private final LocalDateTime modifiedAt; // 수정 시간
+
 	public ToDoPageCardResponseDto(ToDoCard card) {
 		this.toDoId = card.getId();
 		this.title = card.getTitle();
 		this.username = card.getUser().getUsername();
 		this.contents = card.getContents();
 		this.createdAt = card.getCreatedAt();
+		this.modifiedAt = card.getModifiedAt();
 	}
 
 }

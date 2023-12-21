@@ -1,12 +1,15 @@
 package com.sparta.project_todo.todocard.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.sparta.project_todo.todocard.entity.ToDoCard;
 
@@ -30,5 +33,10 @@ public interface ToDoRepository extends JpaRepository<ToDoCard, Long> {
     @Query("select t from ToDoCard t WHERE (t.complete = false AND t.hidden = false) OR (t.hidden = true AND t.user.id = :id)")
     Page<ToDoCard> findPageCard(Pageable pageable, @Param("id") Long userId);
 
+    // 90일 지난 완료처리된 데이터 목록을 출력
+    @Transactional
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("delete from ToDoCard t where t.createdAt <=:cutoffDateTime AND t.complete = true")
+    void deleteExpireCard(LocalDateTime cutoffDateTime);
 
 }

@@ -45,7 +45,7 @@ public class ToDoController {
 
     // 피드 조회
     @GetMapping("/todo")
-    public ResponseEntity<?> getPagingCard(Pageable pageable , @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity<SuccessResponse> getPagingCard(Pageable pageable , @AuthenticationPrincipal UserDetailsImpl userDetails){
         ToDoPageCardListResponseDto toDoPageCardListResponseDto  = toDoService.getPageCard(pageable, userDetails);
         return ResponseEntity.status(SUCCESS_GET_PAGE_CARD.getHttpStatus().value())
             .body(new SuccessResponse(SUCCESS_GET_PAGE_CARD,toDoPageCardListResponseDto));
