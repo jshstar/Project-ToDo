@@ -118,7 +118,7 @@ class CommentServiceTest {
 		//when
 		CommentResponseDto result = commentService.updateComment(1L, updateCommentRequestDto, user);
 
-		assertEquals(1L, result.getId());
+		assertEquals(1L, result.getCommentId());
 		assertEquals("updatecomment", result.getComment());
 	}
 

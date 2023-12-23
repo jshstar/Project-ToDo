@@ -11,7 +11,7 @@ import lombok.Getter;
 public class CommentPageResponseDto {
 	private final Slice<CommentResponseDto> commentResponseDtoPage;
 
-	public CommentPageResponseDto(Slice<Comment> commnetPage){
-		this.commentResponseDtoPage = commnetPage.map(CommentResponseDto::new);
+	public CommentPageResponseDto(Slice<Comment> commentPage){
+		this.commentResponseDtoPage = commentPage.map(CommentResponseDto::new);
 	}
 }
