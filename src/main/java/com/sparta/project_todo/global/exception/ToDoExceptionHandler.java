@@ -56,18 +56,19 @@ public class ToDoExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(IllegalAccessException.class)
     public ResponseEntity<ErrorResponse> illegalAccessExceptionExceptionHandler(IllegalAccessException ex){
         log.error(ex.getMessage());
-        return ResponseEntity.status(INVALID_ACCESS.getHttpStatus().value())
-            .body(new ErrorResponse(INVALID_ACCESS.getHttpStatus().value(), ex.getMessage()));
+        ErrorResponse response = ex.getMessage().isEmpty()?new ErrorResponse(INVALID_ACCESS)
+            :new ErrorResponse(INVALID_ACCESS.getHttpStatus().value(),ex.getMessage());
+        return ResponseEntity.status(INVALID_ACCESS.getHttpStatus().value()).body(response);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> illegalArgumentExceptionHandler(IllegalArgumentException ex) {
         log.error(ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(
-            new ErrorResponse(
-                INVALID_VALUE.getHttpStatus().value(),
-                ex.getMessage())
-        );
+        ErrorResponse response = ex.getMessage().isEmpty()?
+             new ErrorResponse(INVALID_VALUE)
+            :new ErrorResponse(INVALID_VALUE.getHttpStatus().value(),
+            ex.getMessage());
+        return ResponseEntity.status(INVALID_VALUE.getHttpStatus().value()).body(response);
     }
 
 

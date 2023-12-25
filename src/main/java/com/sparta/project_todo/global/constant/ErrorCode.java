@@ -15,6 +15,8 @@ public enum ErrorCode {
     // System Exception
     INVALID_USER(HttpStatus.BAD_REQUEST,"일치하는 유저정보가 없습니다."),
 
+    INVALID_SIGNUP(HttpStatus.BAD_REQUEST, "회원가입에 실패하셨습니다."),
+
     INVALID_TOKEN(HttpStatus.BAD_REQUEST, "일치하는 토큰이 없습니다."),
 
     INVALID_PARAMETER(HttpStatus.BAD_REQUEST,"잘못된 입력값입니다."),

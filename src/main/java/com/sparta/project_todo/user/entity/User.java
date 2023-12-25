@@ -21,13 +21,24 @@ public class User {
     @Column(nullable = false)
     private String password; // PW
 
+    @Column(nullable = false, unique = true)
+    private String email; // email
+
+    @Column(nullable = false)
+    private boolean emailCheck = false; // 이메일 인증
+
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)// 이넘 사용시 데이터 저장 어노테이션
     private UserRoleEnum role; // 유저 권한 정보
 
-    public User(String username, String password, UserRoleEnum role) {
+    public User(String username, String password, String email ,UserRoleEnum role) {
         this.username = username;
         this.password = password;
+        this.email = email;
         this.role = role;
+    }
+
+    public void isEmailAuthCodeCheck(){
+        this.emailCheck = true;
     }
 }

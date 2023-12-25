@@ -1,10 +1,5 @@
 package com.sparta.project_todo.global.config;
 
-import com.sparta.project_todo.security.JwtAuthenticationFilter;
-import com.sparta.project_todo.security.JwtAuthorizationFilter;
-import com.sparta.project_todo.security.JwtUtil;
-import com.sparta.project_todo.security.UserDetailsServiceImpl;
-import lombok.Getter;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.sparta.project_todo.security.JwtAuthenticationFilter;
+import com.sparta.project_todo.security.JwtAuthorizationFilter;
+import com.sparta.project_todo.security.JwtUtil;
+import com.sparta.project_todo.security.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity // Spring Security 지원을 가능하게 함
@@ -63,7 +63,9 @@ public class WebSecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                         .requestMatchers("/api/user/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
                         .requestMatchers(HttpMethod.GET, "/api/todo/**").permitAll()
+                        .requestMatchers("/mail/send").permitAll()
                         .anyRequest().authenticated()// 그 외 모든 요청 인증처리
+
         );
 
 //        http.formLogin((formLogin) ->

@@ -17,6 +17,11 @@ public class SignupRequestDto {
     @Size(min=8, max = 15,message = "8자 이상 15자 이하로 작성해주세요.")
     private String password;
 
+    // email
+    @NotBlank
+    @Pattern(regexp = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$", message = "이메일 형식에 맞게 작성해주세요.")
+    private String email;
+
     // 관리자
     private boolean admin = false;
 
